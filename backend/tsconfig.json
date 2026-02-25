@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "lib": [
+            "esnext"
+        ],
+        "types": [
+            "node"
+        ],
+        /* Dateilayout - WICHTIG */
+        "rootDir": "./src", // Wo dein TS-Code liegt [cite: 41]
+        "outDir": "./dist", // Wo der kompilierte JS-Code landet
+        /* Interoperabilität */
+        "esModuleInterop": true, // Wichtig für Express & Mongoose
+        "forceConsistentCasingInFileNames": true,
+        /* Strenge Typprüfung */
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        /* Verhindert Fehler beim Bauen */
+        "skipLibCheck": true,
+        "sourceMap": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
