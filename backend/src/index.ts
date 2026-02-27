@@ -20,6 +20,7 @@ app.get('/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+
 /** Server starten nach DB-Verbindung */
 const start = async (): Promise<void> => {
     await connectDB();

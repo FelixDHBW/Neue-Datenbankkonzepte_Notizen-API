@@ -6,8 +6,9 @@
         "lib": [
             "esnext"
         ],
-        "types": [
-            "node"
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/types"
         ],
         /* Dateilayout - WICHTIG */
         "rootDir": "./src", // Wo dein TS-Code liegt [cite: 41]
