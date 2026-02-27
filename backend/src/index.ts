@@ -1,17 +1,18 @@
 import express from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import authRoutes from './routes/authRoutes';
 
-dotenv.config();
+dotenv.config(); // Umgebungsvariablen laden (NFA-01)
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;
 
-/** JSON-Body-Parsing aktivieren */
-app.use(express.json());
+app.use(cors()); // CORS für Cross-Origin-Anfragen aktivieren (NFA-01)
+app.use(express.json()); // JSON-Body-Parsing aktivieren
 
-/** Auth-Routen einbinden */
+/** Auth-Routen unter /api/auth einbinden (US-01, FA-05) */
 app.use('/api/auth', authRoutes);
 
 /** Gesundheitscheck */

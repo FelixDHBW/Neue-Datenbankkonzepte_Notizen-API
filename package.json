@@ -7,5 +7,11 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=backend"
+  },
+  "dependencies": {
+    "cors": "^2.8.6"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19"
   }
 }
