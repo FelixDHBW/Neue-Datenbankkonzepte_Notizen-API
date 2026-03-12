@@ -2,10 +2,8 @@ import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Note from '../models/Note';
 
-/**
- * POST /api/notes
- * Erstellt eine neue Notiz für den angemeldeten Benutzer (US-03)
- */
+// Erstellt eine neue Notiz für den angemeldeten Benutzer (US-03)
+
 export const createNote = async (req: Request, res: Response): Promise<void> => {
     const { title, content, tags, priority, reminderDate, customFields, checklist } = req.body;
 
@@ -30,10 +28,8 @@ export const createNote = async (req: Request, res: Response): Promise<void> => 
     res.status(201).json({ success: true, data: note });
 };
 
-/**
- * GET /api/notes
- * Gibt alle Notizen des Benutzers zurück – mit Filter, Suche und Sortierung (FA-01–FA-04, FA-08)
- */
+// Gibt alle Notizen des Benutzers mit Filter zurück, Suche und Sortierung (FA-01–FA-04, FA-08)
+
 export const getNotes = async (req: Request, res: Response): Promise<void> => {
     const { tag, priority, search, sort } = req.query;
 
@@ -67,10 +63,8 @@ export const getNotes = async (req: Request, res: Response): Promise<void> => {
 };
 
 
-/**
- * GET /api/notes/:id
- * Gibt eine einzelne Notiz zurück – nur wenn sie dem Benutzer gehört (US-04, FA-08)
- */
+// Gibt eine einzelne Notiz zurück – nur wenn sie dem Benutzer gehört (US-04, FA-08)
+
 export const getNoteById = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
 
@@ -91,10 +85,8 @@ export const getNoteById = async (req: Request, res: Response): Promise<void> =>
     res.status(200).json({ success: true, data: note });
 };
 
-/**
- * PUT /api/notes/:id
- * Aktualisiert eine Notiz – nur wenn sie dem Benutzer gehört (US-06, US-11, FA-08)
- */
+// Aktualisiert eine Notiz, nur wenn sie dem Benutzer gehört (US-06, US-11, FA-08)
+
 export const updateNote = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
 
@@ -106,7 +98,7 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
 
     const note = await Note.findById(id);
 
-    // Notiz nicht gefunden oder gehört anderem Benutzer – kein Info-Leak (FA-08)
+    // Notiz nicht gefunden oder gehört anderem Benutzer (FA-08)
     if (!note || note.user.toString() !== req.user!._id.toString()) {
         res.status(404).json({ success: false, message: 'Notiz nicht gefunden.' });
         return;
@@ -123,7 +115,7 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
     if (customFields !== undefined) note.customFields = new Map(Object.entries(customFields));
     if (checklist !== undefined) note.checklist = checklist;
 
-    // Mongoose-Validierung greift beim Speichern (NFA-02) – z.B. ungültige Priorität
+    // Mongoose-Validierung greift beim Speichern (NFA-02)
     try {
         const updated = await note.save();
         res.status(200).json({ success: true, data: updated });
@@ -132,10 +124,7 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-/**
- * DELETE /api/notes/:id
- * Löscht eine Notiz endgültig – nur wenn sie dem Benutzer gehört (US-07, FA-08)
- */
+// Löscht eine Notiz endgültig, nur wenn sie dem Benutzer gehört (US-07, FA-08)
 export const deleteNote = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
 

@@ -1,32 +1,30 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-// --- Typen & Enums ---
 
-/** Erlaubte Benutzerrollen (Rollenmodell) */
+// Erlaubte Benutzerrollen (Rollenmodell)
 export enum UserRole {
     BENUTZER = 'Benutzer',
     ADMINISTRATOR = 'Administrator',
 }
 
-/** Interface für ein User-Dokument (US-01) */
+// Interface für ein User-Dokument (US-01)
 export interface IUser extends Document {
     email: string;
     password: string;
     role: UserRole;
     createdAt: Date;
-    /** Passwortvergleich für den Login (NFA-04) */
+    // Passwortvergleich für den Login (NFA-04)
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-/** Interface für das User-Modell */
+// Interface für das User-Modell
 export interface IUserModel extends Model<IUser> { }
 
-// --- Schema ---
 
 const UserSchema = new Schema<IUser>(
     {
-        /** Pflichtfeld, unique, normalisiert (US-01) */
+        // Pflichtfeld, unique, normalisiert (US-01)
         email: {
             type: String,
             required: [true, 'E-Mail-Adresse ist ein Pflichtfeld.'],
@@ -35,7 +33,7 @@ const UserSchema = new Schema<IUser>(
             trim: true,
         },
 
-        /** Pflichtfeld, min. 6 Zeichen, wird gehasht gespeichert (US-01, NFA-04) */
+        // flichtfeld, min. 6 Zeichen, wird gehasht gespeichert (US-01, NFA-04)
         password: {
             type: String,
             required: [true, 'Passwort ist ein Pflichtfeld.'],
@@ -43,7 +41,7 @@ const UserSchema = new Schema<IUser>(
             select: false, // wird nicht standardmäßig zurückgegeben
         },
 
-        /** Benutzerrolle mit Default 'Benutzer' (Rollenmodell) */
+        // Benutzerrolle mit Default 'Benutzer' (Rollenmodell)
         role: {
             type: String,
             enum: {
@@ -54,14 +52,13 @@ const UserSchema = new Schema<IUser>(
         },
     },
     {
-        /** Fügt createdAt und updatedAt automatisch hinzu */
+        // Fügt createdAt und updatedAt automatisch hinzu
         timestamps: true,
     }
 );
 
-// --- Middleware ---
 
-/** Hasht das Passwort vor dem Speichern (NFA-04) */
+// Hasht das Passwort vor dem Speichern (NFA-04)
 UserSchema.pre<IUser>('save', async function () {
     if (!this.isModified('password')) return;
 
@@ -69,16 +66,14 @@ UserSchema.pre<IUser>('save', async function () {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-// --- Methoden ---
 
-/** Vergleicht Klartextpasswort mit gespeichertem Hash (NFA-04) */
+// Vergleicht Klartextpasswort mit gespeichertem Hash (NFA-04)
 UserSchema.methods.comparePassword = async function (
     candidatePassword: string
 ): Promise<boolean> {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-// --- Export ---
 
 const User: IUserModel = mongoose.model<IUser, IUserModel>('User', UserSchema);
 

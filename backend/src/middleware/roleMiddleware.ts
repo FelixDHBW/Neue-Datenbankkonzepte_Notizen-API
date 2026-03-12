@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { UserRole } from '../models/User';
 
 /**
- * adminOnly – erlaubt den Zugriff nur für Benutzer mit Rolle 'Administrator' (Rollenmodell)
+ * adminOnly erlaubt den Zugriff nur für Benutzer mit Rolle 'Administrator' (Rollenmodell)
  * Muss nach protect() in der Middleware-Kette stehen.
  */
 export const adminOnly = (req: Request, res: Response, next: NextFunction): void => {
@@ -15,5 +15,5 @@ export const adminOnly = (req: Request, res: Response, next: NextFunction): void
         return;
     }
 
-    next(); // Rolle 'Administrator' – Zugriff gewährt (Rollenmodell)
+    next(); // Rolle 'Administrator' Zugriff gewährt (Rollenmodell)
 };

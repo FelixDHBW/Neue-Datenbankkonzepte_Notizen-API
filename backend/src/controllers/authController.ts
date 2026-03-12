@@ -2,10 +2,8 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
-/**
- * POST /api/auth/register
- * Registriert einen neuen Benutzer (US-01)
- */
+ //Registriert einen neuen Benutzer (US-01)
+
 export const register = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
@@ -22,7 +20,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    // Benutzer erstellen – Passwort wird automatisch gehasht (NFA-04, pre-save Hook)
+    // Benutzer erstellen – Passwort wird automatisch gehasht (NFA-04)
     const user = await User.create({ email, password });
 
     // Erfolgsantwort ohne Passwort-Hash (FA-05)
@@ -38,10 +36,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     });
 };
 
-/**
- * POST /api/auth/login
- * Meldet einen Benutzer an und gibt einen JWT zurück (US-02)
- */
+
+//Meldet einen Benutzer an und gibt einen JWT zurück (US-02)
+
 export const login = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
@@ -51,10 +48,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    // Benutzer suchen – Passwort-Hash explizit einschließen (FA-06)
+    // Benutzer suchen, Passwort-Hash explizit einschließen (FA-06)
     const user = await User.findOne({ email }).select('+password');
 
-    // Allgemeine Fehlermeldung – kein Hinweis ob E-Mail oder Passwort falsch (US-02, FA-06)
+    // Allgemeine Fehlermeldung, kein Hinweis ob E-Mail oder Passwort falsch (US-02, FA-06)
     if (!user || !(await user.comparePassword(password))) {
         res.status(401).json({ success: false, message: 'Ungültige Anmeldedaten.' });
         return;
