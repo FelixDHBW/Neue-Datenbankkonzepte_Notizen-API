@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import connectDB from './config/db';
-import authRoutes from './routes/authRoutes';
-import noteRoutes from './routes/noteRoutes';
-import adminRoutes from './routes/adminRoutes';
+import connectDB from './config/db.js';
+import authRoutes from './routes/authRoutes.js';
+import noteRoutes from './routes/noteRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 dotenv.config(); // Umgebungsvariablen laden (NFA-01)
 
