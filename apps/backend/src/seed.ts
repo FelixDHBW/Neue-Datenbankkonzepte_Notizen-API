@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import bcrypt from 'bcryptjs';
 import User, { UserRole } from './models/User';
 import Note, { NotePriority } from './models/Note';
 
@@ -27,7 +26,7 @@ const seedDB = async () => {
         console.log('Datenbereinigung abgeschlossen.');
 
         // Admin-Benutzer erstellen
-        const adminUser = await User.create({
+        await User.create({
             email: 'admin@example.com',
             password: 'AdminPassword123!',
             role: UserRole.ADMINISTRATOR,
