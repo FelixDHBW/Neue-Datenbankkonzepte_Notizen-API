@@ -106,18 +106,69 @@ npm install
 
 #### 3. Umgebungsvariablen konfigurieren
 
-Erstelle im `apps/backend`-Ordner eine `.env`-Datei:
+Die Anwendung benötigt eine `.env`-Datei im `apps/backend`-Ordner mit Konfigurationsvariablen.
 
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/notizen-api
-JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
-```
+**Schritt-für-Schritt Anleitung:**
 
-**Für MongoDB Atlas:**
-```env
-MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/notizen-api
-```
+1. **In den Backend-Ordner navigieren:**
+   ```bash
+   cd apps/backend
+   ```
+
+2. **`.env`-Datei aus der Vorlage erstellen:**
+
+   **Windows (Command Prompt):**
+   ```cmd
+   copy .env.example .env
+   ```
+
+   **Windows (PowerShell):**
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+   **Mac/Linux:**
+   ```bash
+   cp .env.example .env
+   ```
+
+3. **Konfiguration anpassen (optional):**
+
+   Öffne die `.env`-Datei in einem Texteditor und passe bei Bedarf folgende Werte an:
+
+   ```env
+   # Server-Port (Standard: 5000)
+   PORT=5000
+
+   # MongoDB Verbindung - LOKAL (Standard)
+   MONGO_URI=mongodb://localhost:27017/notizen-api
+
+   # JWT Secret für Token-Verschlüsselung
+   # WICHTIG: In Produktion mindestens 32 zufällige Zeichen verwenden!
+   JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
+
+   # Umgebung (development | production)
+   NODE_ENV=development
+   ```
+
+4. **Für MongoDB Atlas (Cloud statt lokal):**
+
+   Falls du keine lokale MongoDB-Installation hast, erstelle einen kostenlosen Cluster bei [MongoDB Atlas](https://www.mongodb.com/atlas) und ersetze die `MONGO_URI`:
+
+   ```env
+   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/notizen-api
+   ```
+
+   > ⚠️ **Hinweis:** Ersetze `username`, `password` und `cluster` durch deine tatsächlichen Atlas-Zugangsdaten.
+
+5. **Zurück zum Projekt-Root:**
+   ```bash
+   cd ../..
+   ```
+
+**Troubleshooting:**
+- Falls die `.env`-Datei nicht gefunden wird: Stelle sicher, dass du dich im `apps/backend`-Ordner befindest
+- Falls MongoDB nicht verbindet: Prüfe, ob MongoDB läuft (`net start MongoDB` unter Windows)
 
 #### 4. Datenbank mit Testdaten füllen (optional)
 
