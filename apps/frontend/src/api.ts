@@ -149,6 +149,7 @@ export interface CreateNoteData {
     checklist?: ChecklistItem[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface UpdateNoteData extends Partial<CreateNoteData> {}
 
 // Alle Notizen abrufen (mit Filter)

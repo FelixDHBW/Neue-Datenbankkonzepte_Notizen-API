@@ -324,7 +324,7 @@ const showNoteDetail = async (noteId: string) => {
                 <h3>✓ Checkliste</h3>
                 ${note.checklist
                     .map(
-                        (item, index) => `
+                        (item, _index) => `
                     <div class="checklist-item ${item.isCompleted ? 'completed' : ''}">
                         <input type="checkbox" ${item.isCompleted ? 'checked' : ''} disabled>
                         <span>${escapeHtml(item.text)}</span>
