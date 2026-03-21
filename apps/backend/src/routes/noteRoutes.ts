@@ -5,8 +5,8 @@ import {
     getNoteById,
     updateNote,
     deleteNote,
-} from '../controllers/noteController';
-import { protect } from '../middleware/authMiddleware';
+} from '../controllers/noteController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = Router();
 

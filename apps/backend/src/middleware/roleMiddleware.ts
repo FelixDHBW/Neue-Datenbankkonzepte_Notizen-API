@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserRole } from '../models/User';
+import { UserRole } from '../models/User.js';
 
 /**
  * adminOnly erlaubt den Zugriff nur für Benutzer mit Rolle 'Administrator' (Rollenmodell)

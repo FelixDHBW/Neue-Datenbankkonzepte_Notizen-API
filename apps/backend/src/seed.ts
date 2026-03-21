@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import User, { UserRole } from './models/User';
-import Note, { NotePriority } from './models/Note';
+import User, { UserRole } from './models/User.js';
+import Note, { NotePriority } from './models/Note.js';
 
 // Konfiguration laden, damit prozess.env.MONGO_URI zur Verfügung steht
 dotenv.config();

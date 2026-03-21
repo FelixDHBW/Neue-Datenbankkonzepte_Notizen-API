@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
-import Note from '../models/Note';
+import Note from '../models/Note.js';
 
 // Erstellt eine neue Notiz für den angemeldeten Benutzer (US-03)
 

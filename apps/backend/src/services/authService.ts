@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import User, { IUser, UserRole } from '../models/User';
+import User, { IUser, UserRole } from '../models/User.js';
 
 // Interface für Registrierungsdaten
 export interface IRegisterData {

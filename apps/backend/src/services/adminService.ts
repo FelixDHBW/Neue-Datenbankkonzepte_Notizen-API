@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import User, { UserRole } from '../models/User';
-import Note from '../models/Note';
+import User, { UserRole } from '../models/User.js';
+import Note from '../models/Note.js';
 
 // Interface für Benutzer-Informationen (ohne Passwort)
 export interface IUserInfo {

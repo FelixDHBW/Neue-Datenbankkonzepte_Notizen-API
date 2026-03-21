@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
-import User from '../models/User';
-import Note from '../models/Note';
+import User from '../models/User.js';
+import Note from '../models/Note.js';
 
 //Liste aller registrierten Benutzer (US-13)
 

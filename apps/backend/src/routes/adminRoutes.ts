@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { getAllUsers, manageUserStatus, getAllNotesAdmin } from '../controllers/adminController';
-import { protect } from '../middleware/authMiddleware';
-import { adminOnly } from '../middleware/roleMiddleware';
+import { getAllUsers, manageUserStatus, getAllNotesAdmin } from '../controllers/adminController.js';
+import { protect } from '../middleware/authMiddleware.js';
+import { adminOnly } from '../middleware/roleMiddleware.js';
 
 const router = Router();
 
