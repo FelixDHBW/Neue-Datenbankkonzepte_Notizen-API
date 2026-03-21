@@ -25,7 +25,7 @@ export const removeToken = (): void => {
 async function fetchApi<T>(
     endpoint: string,
     options: RequestInit = {}
-): Promise<{ success: boolean; data?: T; message?: string }> {
+): Promise<{ success: boolean; data?: T; message?: string; token?: string }> {
     const url = `${API_BASE_URL}${endpoint}`;
     
     // Standard-Headers
@@ -92,17 +92,16 @@ export interface AuthResponse {
 export const login = async (
     data: LoginData
 ): Promise<{ success: boolean; data?: AuthResponse; message?: string }> => {
-    console.log('API: Login-Aufruf mit:', data.email);
     const result = await fetchApi<AuthResponse>('/auth/login', {
         method: 'POST',
         body: JSON.stringify(data),
     });
-    console.log('API: Login-Antwort:', result);
 
-    if (result.success && result.data) {
-        console.log('API: Token wird gespeichert');
-        setToken(result.data.token);
-        console.log('API: Token gespeichert, localStorage:', localStorage.getItem('token')?.substring(0, 20) + '...');
+    // Token kann direkt im result oder in result.data sein
+    const token = result.token || result.data?.token;
+    
+    if (result.success && token) {
+        setToken(token);
     }
 
     return result;
