@@ -38,9 +38,30 @@ Eine vollständige Notizen-API mit modernem Web-Frontend zur Verwaltung digitale
 
 ## 📋 Voraussetzungen
 
-- **Node.js** (Version 18 oder höher)
-- **MongoDB** (lokal oder MongoDB Atlas)
-- **Docker** (optional, für containerisierte Entwicklung)
+### Erforderlich
+
+- **Node.js** (Version 18 oder höher) - [Download](https://nodejs.org/)
+  - Wählen Sie die LTS-Version (Long Term Support)
+  - Überprüfen Sie die Installation mit: `node --version`
+
+### Datenbank (eine Option wählen)
+
+**Option A: MongoDB lokal**
+- **MongoDB Community Server** - [Download](https://www.mongodb.com/try/download/community)
+  - Für Windows: MongoDB Community Server + MongoDB Compass (GUI)
+  - Für Mac: MongoDB Community Edition über Homebrew (`brew tap mongodb/brew && brew install mongodb-community`)
+  - Für Linux: Paketmanager Ihrer Distribution
+
+**Option B: MongoDB Atlas (Cloud)**
+- Kostenloses Konto unter [MongoDB Atlas](https://www.mongodb.com/atlas)
+- Keine lokale Installation erforderlich
+
+### Optional: Docker
+
+- **Docker Desktop** - [Download](https://www.docker.com/products/docker-desktop)
+  - Für Windows 10/11 (Pro/Home) oder Mac
+  - Linux: [Docker Engine](https://docs.docker.com/engine/install/) + [Docker Compose](https://docs.docker.com/compose/install/)
+  - Docker Compose wird automatisch mit Docker Desktop installiert
 
 ---
 
