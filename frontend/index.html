@@ -7,7 +7,197 @@
     <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
-    <div id="app"></div>
+    <!-- Haupt-Container -->
+    <div id="app">
+        
+        <!-- Header mit Navigation -->
+        <header class="header" id="header" style="display: none;">
+            <div class="header-content">
+                <h1>📝 Notizen-App</h1>
+                <nav class="nav">
+                    <span id="user-info" class="user-info"></span>
+                    <button id="btn-logout" class="btn btn-secondary">Abmelden</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Haupt-Inhalt -->
+        <main class="main-content">
+            
+            <!-- Login/Registrierung Bereich -->
+            <section id="auth-section" class="auth-section">
+                <div class="auth-container">
+                    <h2>Willkommen bei der Notizen-App</h2>
+                    
+                    <!-- Tabs für Login/Register -->
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" data-tab="login">Anmelden</button>
+                        <button class="tab-btn" data-tab="register">Registrieren</button>
+                    </div>
+
+                    <!-- Login Formular -->
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="login-email">E-Mail</label>
+                            <input type="email" id="login-email" required placeholder="deine@email.de">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Passwort</label>
+                            <input type="password" id="login-password" required placeholder="Dein Passwort">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Anmelden</button>
+                    </form>
+
+                    <!-- Registrierung Formular -->
+                    <form id="register-form" class="auth-form" style="display: none;">
+                        <div class="form-group">
+                            <label for="register-email">E-Mail</label>
+                            <input type="email" id="register-email" required placeholder="deine@email.de">
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Passwort</label>
+                            <input type="password" id="register-password" required minlength="6" placeholder="Mindestens 6 Zeichen">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Registrieren</button>
+                    </form>
+
+                    <!-- Fehlermeldungen -->
+                    <div id="auth-error" class="error-message" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- Dashboard Bereich (nach Login sichtbar) -->
+            <section id="dashboard-section" class="dashboard-section" style="display: none;">
+                
+                <!-- Filter und Suche -->
+                <div class="filter-bar">
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="🔍 Notizen durchsuchen...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="filter-tag">
+                            <option value="">Alle Tags</option>
+                        </select>
+                        <select id="filter-priority">
+                            <option value="">Alle Prioritäten</option>
+                            <option value="low">Niedrig</option>
+                            <option value="medium">Mittel</option>
+                            <option value="high">Hoch</option>
+                        </select>
+                        <select id="sort-order">
+                            <option value="desc">Neueste zuerst</option>
+                            <option value="asc">Älteste zuerst</option>
+                        </select>
+                    </div>
+                    <button id="btn-new-note" class="btn btn-primary">+ Neue Notiz</button>
+                </div>
+
+                <!-- Notizen-Liste -->
+                <div id="notes-list" class="notes-list">
+                    <!-- Notizen werden hier dynamisch eingefügt -->
+                </div>
+
+                <!-- Leerer Zustand -->
+                <div id="empty-state" class="empty-state" style="display: none;">
+                    <p>📭 Noch keine Notizen vorhanden.</p>
+                    <p>Erstelle deine erste Notiz mit dem "+ Neue Notiz" Button!</p>
+                </div>
+            </section>
+
+            <!-- Notiz erstellen/bearbeiten Formular -->
+            <section id="note-form-section" class="note-form-section" style="display: none;">
+                <div class="note-form-container">
+                    <h2 id="note-form-title">Neue Notiz erstellen</h2>
+                    
+                    <form id="note-form">
+                        <input type="hidden" id="note-id">
+                        
+                        <div class="form-group">
+                            <label for="note-title">Titel *</label>
+                            <input type="text" id="note-title" required placeholder="Titel der Notiz">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="note-content">Inhalt *</label>
+                            <textarea id="note-content" rows="6" required placeholder="Inhalt der Notiz..."></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="note-priority">Priorität</label>
+                                <select id="note-priority">
+                                    <option value="">Keine Priorität</option>
+                                    <option value="low">Niedrig</option>
+                                    <option value="medium">Mittel</option>
+                                    <option value="high">Hoch</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="note-reminder">Erinnerungsdatum</label>
+                                <input type="datetime-local" id="note-reminder">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="note-tags">Tags (kommagetrennt)</label>
+                            <input type="text" id="note-tags" placeholder="z.B. Arbeit, Privat, Wichtig">
+                        </div>
+
+                        <!-- Benutzerdefinierte Felder -->
+                        <div class="form-group">
+                            <label>Zusatzfelder (Key-Value)</label>
+                            <div id="custom-fields-container">
+                                <!-- Werden dynamisch hinzugefügt -->
+                            </div>
+                            <button type="button" id="btn-add-custom-field" class="btn btn-secondary btn-small">+ Zusatzfeld hinzufügen</button>
+                        </div>
+
+                        <!-- Checkliste -->
+                        <div class="form-group">
+                            <label>Checkliste</label>
+                            <div id="checklist-container">
+                                <!-- Werden dynamisch hinzugefügt -->
+                            </div>
+                            <button type="button" id="btn-add-checklist-item" class="btn btn-secondary btn-small">+ Checklisten-Eintrag hinzufügen</button>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" id="btn-cancel" class="btn btn-secondary">Abbrechen</button>
+                            <button type="submit" class="btn btn-primary">Speichern</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Notiz Detailansicht -->
+            <section id="note-detail-section" class="note-detail-section" style="display: none;">
+                <div class="note-detail-container">
+                    <div class="note-detail-header">
+                        <button id="btn-back" class="btn btn-secondary">← Zurück</button>
+                        <div class="note-actions">
+                            <button id="btn-edit" class="btn btn-primary">Bearbeiten</button>
+                            <button id="btn-delete" class="btn btn-danger">Löschen</button>
+                        </div>
+                    </div>
+                    
+                    <div id="note-detail-content">
+                        <!-- Wird dynamisch gefüllt -->
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Toast-Benachrichtigungen -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Lade-Indikator -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="spinner"></div>
+            <p>Laden...</p>
+        </div>
+    </div>
+
     <script type="module" src="./src/main.ts"></script>
 </body>
 </html>
