@@ -1,8 +1,8 @@
 # Neue-Datenbankkonzepte_Notizen-API
 
-Eine vollständige Notizen-API mit optionalem Web-Frontend zur Verwaltung digitaler Notizen. Das Projekt wurde im Rahmen des Moduls "Neue Datenbankkonzepte" entwickelt.
+Eine vollständige Notizen-API mit modernem Web-Frontend zur Verwaltung digitaler Notizen. Das Projekt wurde im Rahmen des Moduls "Neue Datenbankkonzepte" entwickelt und folgt modernen Best Practices für Full-Stack-Anwendungen.
 
-## Funktionen
+## ✨ Funktionen
 
 - ✅ **Benutzerverwaltung**: Registrierung und Login mit JWT-Authentifizierung
 - ✅ **Notizen CRUD**: Erstellen, Lesen, Aktualisieren, Löschen
@@ -13,11 +13,11 @@ Eine vollständige Notizen-API mit optionalem Web-Frontend zur Verwaltung digita
 - ✅ **Admin-Funktionen**: Benutzer- und Notizenverwaltung
 - ✅ **Modernes Web-Frontend**: Responsive Design mit TypeScript
 
-## Technologie-Stack
+## 🛠️ Technologie-Stack
 
 ### Backend
-- **Node.js** mit **Express.js**
-- **TypeScript**
+- **Node.js** mit **Express.js** (ES Modules)
+- **TypeScript** mit strikter Typisierung
 - **MongoDB** mit **Mongoose**
 - **JWT** für Authentifizierung
 - **bcryptjs** für Passwort-Hashing
@@ -27,22 +27,64 @@ Eine vollständige Notizen-API mit optionalem Web-Frontend zur Verwaltung digita
 - **Vite** (Build-Tool und Dev-Server)
 - **Vanilla CSS** (modernes, responsives Design)
 
-## Installation
+### Entwicklung & Testing
+- **Jest** mit Supertest für Unit- und Integrationstests
+- **ESLint** + **Prettier** für Code-Qualität
+- **Docker Compose** für containerisierte Entwicklung
+- **npm Workspaces** für Monorepo-Management
 
-### Voraussetzungen
-- Node.js (Version 18 oder höher)
-- MongoDB (lokal oder MongoDB Atlas)
+---
 
-### Schritt 1: Repository klonen
+## 📋 Voraussetzungen
+
+- **Node.js** (Version 18 oder höher)
+- **MongoDB** (lokal oder MongoDB Atlas)
+- **Docker** (optional, für containerisierte Entwicklung)
+
+---
+
+## 🚀 Schnellstart
+
+### Option 1: Mit Docker Compose (empfohlen)
+
+Die einfachste Methode, um das gesamte Projekt zu starten:
+
+```bash
+# Repository klonen
+git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
+cd Neue-Datenbankkonzepte_Notizen-API
+
+# Alle Services starten (MongoDB, Backend, Frontend)
+npm run docker:up
+
+# Oder mit Docker Compose direkt
+docker-compose up -d
+```
+
+**Verfügbare Services:**
+- 🗄️ **MongoDB**: http://localhost:27017
+- 🖥️ **Backend API**: http://localhost:5000
+- 🎨 **Frontend**: http://localhost:5173
+
+### Option 2: Lokale Entwicklung
+
+#### 1. Repository klonen
 
 ```bash
 git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
 cd Neue-Datenbankkonzepte_Notizen-API
 ```
 
-### Schritt 2: Umgebungsvariablen konfigurieren
+#### 2. Dependencies installieren
 
-Erstelle im `backend`-Ordner eine `.env`-Datei:
+```bash
+# Installiert alle Dependencies für Backend und Frontend
+npm install
+```
+
+#### 3. Umgebungsvariablen konfigurieren
+
+Erstelle im `apps/backend`-Ordner eine `.env`-Datei:
 
 ```env
 PORT=5000
@@ -55,169 +97,265 @@ JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/notizen-api
 ```
 
-### Schritt 3: Abhängigkeiten installieren
-
-**Root-Verzeichnis (für Workspaces):**
-```bash
-npm install
-```
-
-**Backend:**
-```bash
-cd backend
-npm install
-cd ..
-```
-
-**Frontend:**
-```bash
-cd frontend
-npm install
-cd ..
-```
-
-### Schritt 4: Datenbank mit Testdaten füllen (optional)
+#### 4. Datenbank mit Testdaten füllen (optional)
 
 ```bash
 npm run seed
 ```
 
 Dieser Befehl erstellt:
-- Einen Admin-Benutzer: `admin@example.com` / `AdminPassword123!`
-- Einen normalen Benutzer: `user@example.com` / `UserPassword123!`
-- Beispielnotizen für den normalen Benutzer
+- 👤 **Admin-Benutzer**: `admin@example.com` / `AdminPassword123!`
+- 👤 **Normaler Benutzer**: `user@example.com` / `UserPassword123!`
+- 📝 Beispielnotizen für den normalen Benutzer
 
-## Anwendung starten
-
-### Alle Services gleichzeitig starten (empfohlen)
+#### 5. Anwendung starten
 
 ```bash
+# Backend und Frontend gleichzeitig starten
 npm run dev
 ```
 
-Dieser Befehl startet **Backend** und **Frontend** gleichzeitig:
-- Backend: `http://localhost:5000`
-- Frontend: `http://localhost:5173`
+**URLs:**
+- Backend: http://localhost:5000
+- Frontend: http://localhost:5173
 
-### Einzelne Services starten
+---
 
-**Nur Backend:**
+## 🧪 Testing
+
+Das Projekt enthält umfassende Tests mit Jest:
+
 ```bash
-npm run dev:backend
+# Alle Tests ausführen
+npm run test
+
+# Tests im Watch-Modus (bei Dateiänderungen neu ausführen)
+npm run test:watch
+
+# Tests mit Coverage-Report
+npm run test:coverage
 ```
 
-**Nur Frontend:**
-```bash
-npm run dev:frontend
+**Test-Struktur:**
+```
+apps/backend/src/__tests__/
+├── setup.ts                      # Test-Konfiguration
+├── unit/
+│   ├── authService.test.ts      # AuthService Unit-Tests
+│   └── noteService.test.ts      # NoteService Unit-Tests
+└── integration/
+    └── authRoutes.test.ts       # API Integrationstests
 ```
 
-### Manuelles Starten (alternativ)
+---
 
-Wenn du Services in separaten Terminals starten möchtest:
+## 🎨 Code-Qualität
 
-**Terminal 1 - Backend:**
+### Linting und Formatierung
+
 ```bash
-cd backend
-npm run dev
+# ESLint ausführen
+npm run lint
+
+# ESLint mit automatischer Fehlerbehebung
+npm run lint:fix
+
+# Prettier Formatierung anwenden
+npm run format
 ```
 
-**Terminal 2 - Frontend:**
-```bash
-cd frontend
-npm run dev
+---
+
+## 🏗️ Projektstruktur
+
+```
+📦 Neue-Datenbankkonzepte_Notizen-API
+├── 📁 apps/
+│   ├── 📁 backend/                 # Express.js API
+│   │   ├── 📁 src/
+│   │   │   ├── 📁 __tests__/      # Jest Tests
+│   │   │   ├── 📁 config/         # Datenbank-Konfiguration
+│   │   │   ├── 📁 controllers/    # HTTP-Request-Handler
+│   │   │   ├── 📁 middleware/     # Auth & Role Middleware
+│   │   │   ├── 📁 models/         # Mongoose-Modelle
+│   │   │   ├── 📁 routes/         # API-Routen
+│   │   │   ├── 📁 services/       # Geschäftslogik
+│   │   │   ├── 📁 types/          # TypeScript-Typen
+│   │   │   ├── index.ts           # Einstiegspunkt
+│   │   │   └── seed.ts            # Testdaten
+│   │   ├── 📄 Dockerfile
+│   │   ├── 📄 eslint.config.mjs
+│   │   ├── 📄 jest.config.js
+│   │   ├── 📄 package.json
+│   │   └── 📄 tsconfig.json
+│   └── 📁 frontend/               # Vite + TypeScript Client
+│       ├── 📁 src/
+│       │   ├── api.ts
+│       │   ├── main.ts
+│       │   └── styles.css
+│       ├── 📄 Dockerfile
+│       ├── 📄 eslint.config.js
+│       ├── 📄 package.json
+│       └── 📄 tsconfig.json
+├── 📁 documents/                  # Dokumentation
+├── 📄 .dockerignore
+├── 📄 .prettierrc                 # Prettier-Konfiguration
+├── 📄 docker-compose.yml          # Docker Compose Konfiguration
+├── 📄 package.json                # Root Package (Workspaces)
+└── 📄 README.md
 ```
 
-## Nutzung
+---
 
-### Web-Frontend
+## 🔧 Verfügbare Scripts
 
-1. Öffne `http://localhost:5173` im Browser
-2. Registriere dich oder melde dich an
-3. Erstelle, bearbeite und verwalte deine Notizen
+### Root-Level
 
-### Test-Benutzer (nach Seeding)
+| Script | Beschreibung |
+|--------|-------------|
+| `npm run dev` | Startet Backend und Frontend parallel |
+| `npm run test` | Führt alle Tests aus |
+| `npm run test:watch` | Tests im Watch-Modus |
+| `npm run test:coverage` | Tests mit Coverage-Report |
+| `npm run lint` | Linting für beide Projekte |
+| `npm run lint:fix` | Linting mit automatischer Fehlerbehebung |
+| `npm run format` | Prettier Formatierung |
+| `npm run seed` | Datenbank mit Testdaten füllen |
+| `npm run docker:up` | Docker Compose starten |
+| `npm run docker:down` | Docker Compose stoppen |
 
-| Rolle | E-Mail | Passwort |
-|-------|--------|----------|
-| Administrator | `admin@example.com` | `AdminPassword123!` |
-| Benutzer | `user@example.com` | `UserPassword123!` |
+### Backend-Spezifisch
 
-### API-Endpunkte
+| Script | Beschreibung |
+|--------|-------------|
+| `npm run dev -w backend` | Backend im Dev-Modus |
+| `npm run build -w backend` | TypeScript kompilieren |
+| `npm run start -w backend` | Kompilierte App starten |
+| `npm run test -w backend` | Tests ausführen |
+| `npm run lint -w backend` | ESLint ausführen |
+| `npm run format -w backend` | Prettier Formatierung |
 
-#### Authentifizierung
+### Frontend-Spezifisch
+
+| Script | Beschreibung |
+|--------|-------------|
+| `npm run dev -w frontend` | Vite Dev-Server |
+| `npm run build -w frontend` | Produktions-Build |
+| `npm run preview -w frontend` | Build preview |
+| `npm run lint -w frontend` | ESLint + TypeScript Check |
+| `npm run format -w frontend` | Prettier Formatierung |
+
+---
+
+## 🔐 Authentifizierung
+
+Die API verwendet JWT (JSON Web Tokens) für die Authentifizierung.
+
+### Token erhalten
+
+**Login:**
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "UserPassword123!"
+}
+```
+
+**Antwort:**
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "...",
+    "email": "user@example.com",
+    "role": "user"
+  }
+}
+```
+
+### Geschützte Endpunkte
+
+Füge den Token im Authorization-Header hinzu:
+
+```http
+GET /api/notes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+---
+
+## 📚 API-Endpunkte
+
+### Authentifizierung
+
 | Methode | Endpunkt | Beschreibung |
-|---------|----------|-------------|
-| POST | `/api/auth/register` | Registrierung |
-| POST | `/api/auth/login` | Login |
+|---------|----------|--------------|
+| POST | `/api/auth/register` | Benutzer registrieren |
+| POST | `/api/auth/login` | Benutzer anmelden |
 
-#### Notizen (erfordert Authentifizierung)
+### Notizen (Authentifizierung erforderlich)
+
 | Methode | Endpunkt | Beschreibung |
-|---------|----------|-------------|
-| GET | `/api/notes` | Alle Notizen (mit Filter) |
-| GET | `/api/notes/:id` | Einzelne Notiz |
-| POST | `/api/notes` | Notiz erstellen |
+|---------|----------|--------------|
+| GET | `/api/notes` | Alle Notizen abrufen |
+| POST | `/api/notes` | Neue Notiz erstellen |
+| GET | `/api/notes/:id` | Einzelne Notiz abrufen |
 | PUT | `/api/notes/:id` | Notiz aktualisieren |
 | DELETE | `/api/notes/:id` | Notiz löschen |
 
-**Filter-Parameter für GET /api/notes:**
-- `?tag=arbeit` - Filter nach Tag
-- `?priority=high` - Filter nach Priorität
-- `?search=keyword` - Volltextsuche
-- `?sort=asc` oder `?sort=desc` - Sortierung
+### Admin (Admin-Rolle erforderlich)
 
-#### Admin (erfordert Admin-Rolle)
 | Methode | Endpunkt | Beschreibung |
-|---------|----------|-------------|
-| GET | `/api/admin/users` | Alle Benutzer |
+|---------|----------|--------------|
+| GET | `/api/admin/users` | Alle Benutzer auflisten |
 | DELETE | `/api/admin/users/:id` | Benutzer löschen |
-| GET | `/api/admin/notes` | Alle Notizen systemweit |
+| GET | `/api/admin/notes` | Alle Notizen auflisten |
+| DELETE | `/api/admin/notes/:id` | Notiz löschen |
 
-## Projektstruktur
+---
 
-```
-.
-├── backend/
-│   ├── src/
-│   │   ├── config/
-│   │   │   └── db.ts              # MongoDB-Verbindung
-│   │   ├── controllers/
-│   │   │   ├── authController.ts  # Login/Register
-│   │   │   ├── noteController.ts  # Notizen CRUD
-│   │   │   └── adminController.ts # Admin-Funktionen
-│   │   ├── middleware/
-│   │   │   ├── authMiddleware.ts  # JWT-Validierung
-│   │   │   └── roleMiddleware.ts  # Admin-Prüfung
-│   │   ├── models/
-│   │   │   ├── User.ts            # Benutzer-Modell
-│   │   │   └── Note.ts            # Notiz-Modell
-│   │   ├── routes/
-│   │   │   ├── authRoutes.ts
-│   │   │   ├── noteRoutes.ts
-│   │   │   └── adminRoutes.ts
-│   │   ├── types/
-│   │   │   └── index.d.ts
-│   │   ├── index.ts               # Server-Einstieg
-│   │   └── seed.ts                # Testdaten
-│   ├── package.json
-│   └── tsconfig.json
-├── frontend/
-│   ├── src/
-│   │   ├── api.ts                 # API-Client
-│   │   ├── main.ts                # App-Logik
-│   │   └── styles.css             # Styles
-│   ├── index.html
-│   ├── package.json
-│   └── tsconfig.json
-└── package.json
+## 🐳 Docker-Entwicklung
+
+### Container bauen und starten
+
+```bash
+# Alle Services bauen und starten
+docker-compose up --build
+
+# Im Hintergrund starten
+docker-compose up -d
+
+# Logs anzeigen
+docker-compose logs -f backend
+
+# Einen bestimmten Service neu starten
+docker-compose restart backend
 ```
 
-## Lizenz
+### Container stoppen
+
+```bash
+# Container stoppen und entfernen
+docker-compose down
+
+# Inklusive Volumes löschen
+docker-compose down -v
+```
+
+---
+
+## 📝 Lizenz
 
 ISC
 
-## Autoren
+---
 
-- Niklas Kiefer
-- Felix Guist
+## 👨‍💻 Autor
 
-DHBW Heidenheim - Neue Datenbankkonzepte - WWI24-A
+Entwickelt im Rahmen des Moduls "Neue Datenbankkonzepte" an der DHBW Heidenheim.
+
+Bei Fragen oder Problemen erstelle gerne ein [GitHub Issue](https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API/issues).
