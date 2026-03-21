@@ -156,13 +156,17 @@ loginForm.addEventListener('submit', async (e) => {
     const password = (document.getElementById('login-password') as HTMLInputElement).value;
 
     showLoading();
+    console.log('Login-Versuch für:', email);
     const result = await login({ email, password });
+    console.log('Login-Ergebnis:', result);
     hideLoading();
 
     if (result.success) {
+        console.log('Login erfolgreich, zeige Dashboard');
         showToast('Erfolgreich angemeldet!', 'success');
-        showDashboard();
+        await showDashboard();
     } else {
+        console.log('Login fehlgeschlagen:', result.message);
         showAuthError(result.message || 'Anmeldung fehlgeschlagen');
     }
 });
@@ -356,6 +360,8 @@ const showNoteDetail = async (noteId: string) => {
 // Notizen laden
 const loadNotes = async () => {
     showLoading();
+    console.log('loadNotes: Starte Laden der Notizen');
+    console.log('loadNotes: Token vorhanden?', !!localStorage.getItem('token'));
 
     const filters = {
         tag: filterTag.value,
@@ -363,16 +369,26 @@ const loadNotes = async () => {
         search: searchInput.value,
         sort: sortOrder.value as 'asc' | 'desc',
     };
+    console.log('loadNotes: Filter:', filters);
 
     const result = await getNotes(filters);
+    console.log('loadNotes: Ergebnis:', result);
     hideLoading();
 
     if (result.success && result.data) {
+        console.log('loadNotes: Notizen erfolgreich geladen:', result.data.length);
         currentNotes = result.data;
         renderNotes();
         updateTagFilter();
+    } else if (result.message?.includes('401') || result.message?.includes('Token')) {
+        // Bei Authentifizierungsfehler zum Login zurück
+        console.log('loadNotes: Authentifizierungsfehler');
+        removeToken();
+        showAuthSection();
+        showToast('Sitzung abgelaufen. Bitte melde dich erneut an.', 'error');
     } else {
-        showToast('Fehler beim Laden der Notizen', 'error');
+        console.log('loadNotes: Fehler:', result.message);
+        showToast(result.message || 'Fehler beim Laden der Notizen', 'error');
     }
 };
 

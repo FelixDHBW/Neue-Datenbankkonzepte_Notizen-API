@@ -50,11 +50,6 @@ async function fetchApi<T>(
         const data = await response.json();
 
         if (!response.ok) {
-            // Bei 401 (Token ungültig/abgelaufen) automatisch ausloggen
-            if (response.status === 401) {
-                removeToken();
-                window.location.href = '/';
-            }
             return {
                 success: false,
                 message: data.message || `Fehler: ${response.status}`,
@@ -97,13 +92,17 @@ export interface AuthResponse {
 export const login = async (
     data: LoginData
 ): Promise<{ success: boolean; data?: AuthResponse; message?: string }> => {
+    console.log('API: Login-Aufruf mit:', data.email);
     const result = await fetchApi<AuthResponse>('/auth/login', {
         method: 'POST',
         body: JSON.stringify(data),
     });
+    console.log('API: Login-Antwort:', result);
 
     if (result.success && result.data) {
+        console.log('API: Token wird gespeichert');
         setToken(result.data.token);
+        console.log('API: Token gespeichert, localStorage:', localStorage.getItem('token')?.substring(0, 20) + '...');
     }
 
     return result;

@@ -30,7 +30,7 @@ services:
       - NODE_ENV=development
       - PORT=5000
       - MONGO_URI=mongodb://admin:adminpassword@mongodb:27017/notizen-api?authSource=admin
-      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
     depends_on:
       - mongodb
     volumes:
