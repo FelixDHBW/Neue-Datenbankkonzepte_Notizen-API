@@ -44,17 +44,19 @@ Eine vollständige Notizen-API mit modernem Web-Frontend zur Verwaltung digitale
   - Wählen Sie die LTS-Version (Long Term Support)
   - Überprüfen Sie die Installation mit: `node --version`
 
-### Datenbank (eine Option wählen)
+### Datenbank (empfohlen: Lokal)
 
-**Option A: MongoDB lokal**
+**Option A: MongoDB lokal ⭐ EMPFOHLEN**
 - **MongoDB Community Server** - [Download](https://www.mongodb.com/try/download/community)
   - Für Windows: MongoDB Community Server + MongoDB Compass (GUI)
   - Für Mac: MongoDB Community Edition über Homebrew (`brew tap mongodb/brew && brew install mongodb-community`)
   - Für Linux: Paketmanager Ihrer Distribution
+- **Vorteile:** Schneller, keine Internetverbindung nötig, vollständige Kontrolle
 
-**Option B: MongoDB Atlas (Cloud)**
+**Option B: MongoDB Atlas (Cloud) - Optional**
+- Nur wenn keine lokale Installation möglich ist
 - Kostenloses Konto unter [MongoDB Atlas](https://www.mongodb.com/atlas)
-- Keine lokale Installation erforderlich
+- Internetverbindung erforderlich
 
 ### Optional: Docker
 
