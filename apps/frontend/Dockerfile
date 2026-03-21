@@ -13,6 +13,9 @@ RUN npm install
 # TypeScript-Konfiguration kopieren
 COPY tsconfig.json ./
 
+# Index.html kopieren (wichtig für Vite!)
+COPY index.html ./
+
 # Port freigeben
 EXPOSE 5173
 

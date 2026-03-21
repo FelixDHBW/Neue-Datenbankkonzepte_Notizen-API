@@ -55,10 +55,11 @@ services:
       - backend
     volumes:
       - ./apps/frontend/src:/app/src
+      - ./apps/frontend/index.html:/app/index.html
       - /app/node_modules
     networks:
       - notizen-network
-    command: npm run dev
+    # command wird entfernt - verwendet CMD aus Dockerfile mit --host
 
 volumes:
   mongodb_data:
