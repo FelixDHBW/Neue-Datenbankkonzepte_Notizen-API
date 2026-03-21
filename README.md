@@ -134,9 +134,9 @@ Die Anwendung benötigt eine `.env`-Datei im `apps/backend`-Ordner mit Konfigura
    cp .env.example .env
    ```
 
-3. **Konfiguration anpassen (optional):**
+3. **Konfiguration prüfen (optional):**
 
-   Öffne die `.env`-Datei in einem Texteditor und passe bei Bedarf folgende Werte an:
+   Die `.env`-Datei ist bereits mit Standardwerten für die lokale MongoDB konfiguriert:
 
    ```env
    # Server-Port (Standard: 5000)
@@ -146,24 +146,15 @@ Die Anwendung benötigt eine `.env`-Datei im `apps/backend`-Ordner mit Konfigura
    MONGO_URI=mongodb://localhost:27017/notizen-api
 
    # JWT Secret für Token-Verschlüsselung
-   # WICHTIG: In Produktion mindestens 32 zufällige Zeichen verwenden!
    JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
 
    # Umgebung (development | production)
    NODE_ENV=development
    ```
 
-4. **Für MongoDB Atlas (Cloud statt lokal):**
+   > 💡 **Hinweis:** Für die lokale Entwicklung musst du normalerweise nichts ändern.
 
-   Falls du keine lokale MongoDB-Installation hast, erstelle einen kostenlosen Cluster bei [MongoDB Atlas](https://www.mongodb.com/atlas) und ersetze die `MONGO_URI`:
-
-   ```env
-   MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/notizen-api
-   ```
-
-   > ⚠️ **Hinweis:** Ersetze `username`, `password` und `cluster` durch deine tatsächlichen Atlas-Zugangsdaten.
-
-5. **Zurück zum Projekt-Root:**
+4. **Zurück zum Projekt-Root:**
    ```bash
    cd ../..
    ```
@@ -171,6 +162,24 @@ Die Anwendung benötigt eine `.env`-Datei im `apps/backend`-Ordner mit Konfigura
 **Troubleshooting:**
 - Falls die `.env`-Datei nicht gefunden wird: Stelle sicher, dass du dich im `apps/backend`-Ordner befindest
 - Falls MongoDB nicht verbindet: Prüfe, ob MongoDB läuft (`net start MongoDB` unter Windows)
+
+<details>
+<summary>🌐 Alternative: MongoDB Atlas (Cloud) - Nur wenn lokale Installation nicht möglich</summary>
+
+Falls du MongoDB nicht lokal installieren kannst, kannst du MongoDB Atlas nutzen:
+
+1. Kostenloses Konto bei [MongoDB Atlas](https://www.mongodb.com/atlas) erstellen
+2. M0-Cluster (Sandbox) erstellen
+3. Database User + IP-Whitelist (0.0.0.0/0) konfigurieren
+4. Connection String kopieren und in `.env` einfügen:
+
+```env
+MONGO_URI=mongodb+srv://username:password@cluster.xxxxx.mongodb.net/notizen-api?retryWrites=true&w=majority
+```
+
+> ⚠️ Ersetze `username`, `password` und `cluster` durch deine Atlas-Zugangsdaten.
+
+</details>
 
 #### 4. Datenbank mit Testdaten füllen (optional)
 
