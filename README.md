@@ -21,6 +21,7 @@ Eine vollständige Notizen-API mit modernem Web-Frontend zur Verwaltung digitale
 - **MongoDB** mit **Mongoose**
 - **JWT** für Authentifizierung
 - **bcryptjs** für Passwort-Hashing
+- **tsx** für TypeScript-Ausführung im Dev-Modus
 
 ### Frontend
 - **TypeScript**
@@ -174,6 +175,8 @@ npm run format
 │   ├── 📁 backend/                 # Express.js API
 │   │   ├── 📁 src/
 │   │   │   ├── 📁 __tests__/      # Jest Tests
+│   │   │   │   ├── 📁 integration/# Integrationstests
+│   │   │   │   └── 📁 unit/       # Unit-Tests
 │   │   │   ├── 📁 config/         # Datenbank-Konfiguration
 │   │   │   ├── 📁 controllers/    # HTTP-Request-Handler
 │   │   │   ├── 📁 middleware/     # Auth & Role Middleware
@@ -198,7 +201,8 @@ npm run format
 │       ├── 📄 package.json
 │       └── 📄 tsconfig.json
 ├── 📁 documents/                  # Dokumentation
-├── 📄 .dockerignore
+├── 📁 .vscode/                    # VSCode Einstellungen
+├──  .dockerignore
 ├── 📄 .prettierrc                 # Prettier-Konfiguration
 ├── 📄 docker-compose.yml          # Docker Compose Konfiguration
 ├── 📄 package.json                # Root Package (Workspaces)
@@ -272,7 +276,7 @@ Content-Type: application/json
   "user": {
     "id": "...",
     "email": "user@example.com",
-    "role": "user"
+    "role": "Benutzer"
   }
 }
 ```
@@ -312,9 +316,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 | Methode | Endpunkt | Beschreibung |
 |---------|----------|--------------|
 | GET | `/api/admin/users` | Alle Benutzer auflisten |
-| DELETE | `/api/admin/users/:id` | Benutzer löschen |
-| GET | `/api/admin/notes` | Alle Notizen auflisten |
-| DELETE | `/api/admin/notes/:id` | Notiz löschen |
+| DELETE | `/api/admin/users/:id` | Benutzer inkl. aller Notizen löschen |
+| GET | `/api/admin/notes` | Alle Notizen systemweit auflisten |
 
 ---
 
