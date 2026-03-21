@@ -14,8 +14,8 @@ export interface ICreateNoteData {
     title: string;
     content: string;
     tags?: string[];
-    priority?: NotePriority | null;
-    reminderDate?: Date | null;
+    priority?: NotePriority;
+    reminderDate?: Date;
     customFields?: Record<string, unknown>;
     checklist?: Array<{ text: string; isCompleted: boolean }>;
 }
@@ -25,8 +25,8 @@ export interface IUpdateNoteData {
     title?: string;
     content?: string;
     tags?: string[];
-    priority?: NotePriority | null;
-    reminderDate?: Date | null;
+    priority?: NotePriority;
+    reminderDate?: Date;
     customFields?: Record<string, unknown>;
     checklist?: Array<{ text: string; isCompleted: boolean }>;
 }
@@ -40,17 +40,24 @@ export class NoteService {
      * Erstellt eine neue Notiz für einen Benutzer
      */
     async createNote(userId: Types.ObjectId, data: ICreateNoteData): Promise<INote> {
-        const note = await Note.create({
+        const noteData: Record<string, unknown> = {
             user: userId,
             title: data.title,
             content: data.content,
             tags: data.tags ?? [],
-            priority: data.priority ?? null,
-            reminderDate: data.reminderDate ?? null,
             customFields: data.customFields ?? {},
             checklist: data.checklist ?? [],
-        });
+        };
 
+        // Optionale Felder nur hinzufügen wenn vorhanden
+        if (data.priority !== undefined) {
+            noteData.priority = data.priority;
+        }
+        if (data.reminderDate !== undefined) {
+            noteData.reminderDate = data.reminderDate;
+        }
+
+        const note = await Note.create(noteData);
         return note;
     }
 
@@ -130,8 +137,12 @@ export class NoteService {
         if (data.title !== undefined) note.title = data.title;
         if (data.content !== undefined) note.content = data.content;
         if (data.tags !== undefined) note.tags = data.tags;
-        if (data.priority !== undefined) note.priority = data.priority;
-        if (data.reminderDate !== undefined) note.reminderDate = data.reminderDate;
+        if (data.priority !== undefined) {
+            note.priority = data.priority as NotePriority;
+        }
+        if (data.reminderDate !== undefined) {
+            note.reminderDate = data.reminderDate;
+        }
         if (data.customFields !== undefined) {
             note.customFields = new Map(Object.entries(data.customFields));
         }
