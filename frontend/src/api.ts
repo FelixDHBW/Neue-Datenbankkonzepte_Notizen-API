@@ -50,6 +50,11 @@ async function fetchApi<T>(
         const data = await response.json();
 
         if (!response.ok) {
+            // Bei 401 (Token ungültig/abgelaufen) automatisch ausloggen
+            if (response.status === 401) {
+                removeToken();
+                window.location.href = '/';
+            }
             return {
                 success: false,
                 message: data.message || `Fehler: ${response.status}`,
