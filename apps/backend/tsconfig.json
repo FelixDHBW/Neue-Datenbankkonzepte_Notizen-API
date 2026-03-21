@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "ignoreDeprecations": "6.0",
+        "lib": [
+            "ES2022"
+        ],
+        "types": ["node", "jest"],
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/types"
+        ],
+        /* Dateilayout - WICHTIG */
+        "rootDir": "./src",
+        "outDir": "./dist",
+        /* Interoperabilität */
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        /* Strenge Typprüfung */
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        /* Verhindert Fehler beim Bauen */
+        "skipLibCheck": true,
+        "sourceMap": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "**/__tests__/**"
+    ]
+}
