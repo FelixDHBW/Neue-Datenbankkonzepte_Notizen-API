@@ -42,7 +42,7 @@ export class AdminService {
     async getAllUsers(): Promise<IUserInfo[]> {
         const users = await User.find().select('_id email role createdAt');
 
-        return users.map(user => ({
+        return users.map((user) => ({
             id: user._id.toString(),
             email: user.email,
             role: user.role,
@@ -106,7 +106,7 @@ export class AdminService {
             .select('_id title tags priority createdAt updatedAt user')
             .populate('user', 'email role');
 
-        return notes.map(note => {
+        return notes.map((note) => {
             const user = note.user as unknown as { email: string; role: UserRole };
             return {
                 _id: note._id.toString(),

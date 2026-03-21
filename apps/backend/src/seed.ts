@@ -57,8 +57,8 @@ const seedDB = async () => {
                 customFields: new Map<string, unknown>([
                     ['budget', '150 EUR'],
                     ['store', 'Rewe & Getränkemarkt'],
-                    ['guestsInfo', { expected: 15, confirmed: 12 }]
-                ])
+                    ['guestsInfo', { expected: 15, confirmed: 12 }],
+                ]),
             },
             {
                 user: regularUser._id,
@@ -81,17 +81,18 @@ const seedDB = async () => {
                 customFields: new Map<string, unknown>([
                     ['druckerModell', 'Prusa i3 MK3S+'],
                     ['kostenSchätzung', 800],
-                    ['links', ['https://prusa3d.com', 'https://thingiverse.com']]
-                ])
-            }
+                    ['links', ['https://prusa3d.com', 'https://thingiverse.com']],
+                ]),
+            },
         ];
 
         await Note.insertMany(notesToSeed);
-        console.log(`${notesToSeed.length} Notizen für den regulären Benutzer erfolgreich erstellt.`);
+        console.log(
+            `${notesToSeed.length} Notizen für den regulären Benutzer erfolgreich erstellt.`
+        );
 
         console.log('Seeding erfolgreich abgeschlossen!');
         process.exit(0);
-
     } catch (error) {
         if (error instanceof Error) {
             console.error(`Fehler beim Seeding: ${error.message}`);

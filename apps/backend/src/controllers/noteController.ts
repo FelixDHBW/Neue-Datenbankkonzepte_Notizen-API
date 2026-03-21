@@ -62,7 +62,6 @@ export const getNotes = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({ success: true, count: notes.length, data: notes });
 };
 
-
 // Gibt eine einzelne Notiz zurück – nur wenn sie dem Benutzer gehört (US-04, FA-08)
 
 export const getNoteById = async (req: Request, res: Response): Promise<void> => {
@@ -120,7 +119,10 @@ export const updateNote = async (req: Request, res: Response): Promise<void> => 
         const updated = await note.save();
         res.status(200).json({ success: true, data: updated });
     } catch (error) {
-        res.status(400).json({ success: false, message: error instanceof Error ? error.message : 'Validierungsfehler.' });
+        res.status(400).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Validierungsfehler.',
+        });
     }
 };
 

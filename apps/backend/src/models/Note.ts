@@ -30,8 +30,7 @@ export interface INote extends Document {
 }
 
 // Interface für das Mongoose-Modell
-export interface INoteModel extends Model<INote> { }
-
+export interface INoteModel extends Model<INote> {}
 
 const ChecklistItemSchema = new Schema<IChecklistItem>(
     {
@@ -103,8 +102,6 @@ const NoteSchema = new Schema<INote>(
         timestamps: true,
     }
 );
-
-
 
 const Note: INoteModel = mongoose.model<INote, INoteModel>('Note', NoteSchema);
 

@@ -24,7 +24,6 @@ app.get('/health', (_req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-
 const start = async (): Promise<void> => {
     await connectDB();
     app.listen(PORT, () => {

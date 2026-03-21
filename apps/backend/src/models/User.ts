@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-
 // Erlaubte Benutzerrollen (Rollenmodell)
 export enum UserRole {
     BENUTZER = 'Benutzer',
@@ -19,8 +18,7 @@ export interface IUser extends Document {
 }
 
 // Interface für das User-Modell
-export interface IUserModel extends Model<IUser> { }
-
+export interface IUserModel extends Model<IUser> {}
 
 const UserSchema = new Schema<IUser>(
     {
@@ -57,7 +55,6 @@ const UserSchema = new Schema<IUser>(
     }
 );
 
-
 // Hasht das Passwort vor dem Speichern (NFA-04)
 UserSchema.pre<IUser>('save', async function () {
     if (!this.isModified('password')) return;
@@ -66,14 +63,10 @@ UserSchema.pre<IUser>('save', async function () {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-
 // Vergleicht Klartextpasswort mit gespeichertem Hash (NFA-04)
-UserSchema.methods.comparePassword = async function (
-    candidatePassword: string
-): Promise<boolean> {
+UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
     return bcrypt.compare(candidatePassword, this.password);
 };
-
 
 const User: IUserModel = mongoose.model<IUser, IUserModel>('User', UserSchema);
 

@@ -311,15 +311,21 @@ const showNoteDetail = async (noteId: string) => {
             ${note.reminderDate ? `<span class="meta-item">⏰ Erinnerung: ${formatDate(note.reminderDate)}</span>` : ''}
         </div>
 
-        ${note.tags?.length ? `
+        ${
+            note.tags?.length
+                ? `
             <div class="note-card-tags" style="margin-bottom: 1.5rem;">
                 ${note.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
             </div>
-        ` : ''}
+        `
+                : ''
+        }
 
         <div class="note-detail-content">${escapeHtml(note.content)}</div>
 
-        ${note.checklist?.length ? `
+        ${
+            note.checklist?.length
+                ? `
             <div class="checklist">
                 <h3>✓ Checkliste</h3>
                 ${note.checklist
@@ -333,9 +339,13 @@ const showNoteDetail = async (noteId: string) => {
                     )
                     .join('')}
             </div>
-        ` : ''}
+        `
+                : ''
+        }
 
-        ${Object.keys(note.customFields || {}).length ? `
+        ${
+            Object.keys(note.customFields || {}).length
+                ? `
             <div class="custom-fields">
                 <h3>📎 Zusatzfelder</h3>
                 ${Object.entries(note.customFields)
@@ -349,7 +359,9 @@ const showNoteDetail = async (noteId: string) => {
                     )
                     .join('')}
             </div>
-        ` : ''}
+        `
+                : ''
+        }
     `;
 };
 
@@ -428,12 +440,19 @@ const createNoteCard = (note: Note): HTMLElement => {
         </div>
         <div class="note-card-content">${escapeHtml(note.content)}</div>
         <div class="note-card-footer">
-            ${note.tags?.length ? `
+            ${
+                note.tags?.length
+                    ? `
                 <div class="note-card-tags">
-                    ${note.tags.slice(0, 3).map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                    ${note.tags
+                        .slice(0, 3)
+                        .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
+                        .join('')}
                     ${note.tags.length > 3 ? `<span class="tag">+${note.tags.length - 3}</span>` : ''}
                 </div>
-            ` : '<div></div>'}
+            `
+                    : '<div></div>'
+            }
             <span class="note-card-date">${formatDate(note.updatedAt)}</span>
         </div>
     `;

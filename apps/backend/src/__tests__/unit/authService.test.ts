@@ -6,7 +6,7 @@ describe('AuthService', () => {
         it('should register a new user successfully', async () => {
             const result = await authService.register({
                 email: 'test@example.com',
-                password: 'Password123!'
+                password: 'Password123!',
             });
 
             expect(result.success).toBe(true);
@@ -19,13 +19,13 @@ describe('AuthService', () => {
             // Ersten Benutzer erstellen
             await authService.register({
                 email: 'duplicate@example.com',
-                password: 'Password123!'
+                password: 'Password123!',
             });
 
             // Zweiten Versuch mit gleicher E-Mail
             const result = await authService.register({
                 email: 'duplicate@example.com',
-                password: 'Password123!'
+                password: 'Password123!',
             });
 
             expect(result.success).toBe(false);
@@ -37,14 +37,14 @@ describe('AuthService', () => {
         beforeEach(async () => {
             await authService.register({
                 email: 'login@example.com',
-                password: 'Password123!'
+                password: 'Password123!',
             });
         });
 
         it('should login with valid credentials', async () => {
             const result = await authService.login({
                 email: 'login@example.com',
-                password: 'Password123!'
+                password: 'Password123!',
             });
 
             expect(result.success).toBe(true);
@@ -55,7 +55,7 @@ describe('AuthService', () => {
         it('should fail with invalid password', async () => {
             const result = await authService.login({
                 email: 'login@example.com',
-                password: 'WrongPassword123!'
+                password: 'WrongPassword123!',
             });
 
             expect(result.success).toBe(false);
@@ -65,7 +65,7 @@ describe('AuthService', () => {
         it('should fail with non-existent email', async () => {
             const result = await authService.login({
                 email: 'nonexistent@example.com',
-                password: 'Password123!'
+                password: 'Password123!',
             });
 
             expect(result.success).toBe(false);

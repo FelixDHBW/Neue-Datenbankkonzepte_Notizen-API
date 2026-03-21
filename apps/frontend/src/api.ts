@@ -27,7 +27,7 @@ async function fetchApi<T>(
     options: RequestInit = {}
 ): Promise<{ success: boolean; data?: T; message?: string; token?: string }> {
     const url = `${API_BASE_URL}${endpoint}`;
-    
+
     // Standard-Headers
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export const login = async (
 
     // Token kann direkt im result oder in result.data sein
     const token = result.token || result.data?.token;
-    
+
     if (result.success && token) {
         setToken(token);
     }
@@ -110,7 +110,11 @@ export const login = async (
 // Registrierung
 export const register = async (
     data: RegisterData
-): Promise<{ success: boolean; data?: { id: string; email: string; role: string }; message?: string }> => {
+): Promise<{
+    success: boolean;
+    data?: { id: string; email: string; role: string };
+    message?: string;
+}> => {
     return await fetchApi('/auth/register', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -160,7 +164,7 @@ export const getNotes = async (filters?: {
     sort?: 'asc' | 'desc';
 }): Promise<{ success: boolean; data?: Note[]; message?: string }> => {
     const params = new URLSearchParams();
-    
+
     if (filters) {
         if (filters.tag) params.append('tag', filters.tag);
         if (filters.priority) params.append('priority', filters.priority);
@@ -203,9 +207,7 @@ export const updateNote = async (
 };
 
 // Notiz löschen
-export const deleteNote = async (
-    id: string
-): Promise<{ success: boolean; message?: string }> => {
+export const deleteNote = async (id: string): Promise<{ success: boolean; message?: string }> => {
     return await fetchApi(`/notes/${id}`, {
         method: 'DELETE',
     });
@@ -232,9 +234,7 @@ export const getAllUsers = async (): Promise<{
 };
 
 // Benutzer löschen (Admin)
-export const deleteUser = async (
-    id: string
-): Promise<{ success: boolean; message?: string }> => {
+export const deleteUser = async (id: string): Promise<{ success: boolean; message?: string }> => {
     return await fetchApi(`/admin/users/${id}`, {
         method: 'DELETE',
     });

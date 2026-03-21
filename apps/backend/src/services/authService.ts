@@ -95,11 +95,7 @@ export class AuthService {
             throw new Error('Serverkonfigurationsfehler: JWT_SECRET nicht gesetzt.');
         }
 
-        const token = jwt.sign(
-            { id: user._id, role: user.role },
-            jwtSecret,
-            { expiresIn: '8h' }
-        );
+        const token = jwt.sign({ id: user._id, role: user.role }, jwtSecret, { expiresIn: '8h' });
 
         return {
             success: true,

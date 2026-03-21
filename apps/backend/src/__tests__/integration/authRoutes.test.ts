@@ -11,12 +11,10 @@ app.use('/api/auth', authRoutes);
 describe('Auth Routes Integration', () => {
     describe('POST /api/auth/register', () => {
         it('should register a new user', async () => {
-            const response = await request(app)
-                .post('/api/auth/register')
-                .send({
-                    email: 'integration@test.com',
-                    password: 'Password123!'
-                });
+            const response = await request(app).post('/api/auth/register').send({
+                email: 'integration@test.com',
+                password: 'Password123!',
+            });
 
             expect(response.status).toBe(201);
             expect(response.body.success).toBe(true);
@@ -24,12 +22,10 @@ describe('Auth Routes Integration', () => {
         });
 
         it('should fail with invalid email', async () => {
-            const response = await request(app)
-                .post('/api/auth/register')
-                .send({
-                    email: 'invalid-email',
-                    password: 'Password123!'
-                });
+            const response = await request(app).post('/api/auth/register').send({
+                email: 'invalid-email',
+                password: 'Password123!',
+            });
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
@@ -38,21 +34,17 @@ describe('Auth Routes Integration', () => {
 
     describe('POST /api/auth/login', () => {
         beforeEach(async () => {
-            await request(app)
-                .post('/api/auth/register')
-                .send({
-                    email: 'login@test.com',
-                    password: 'Password123!'
-                });
+            await request(app).post('/api/auth/register').send({
+                email: 'login@test.com',
+                password: 'Password123!',
+            });
         });
 
         it('should login with valid credentials', async () => {
-            const response = await request(app)
-                .post('/api/auth/login')
-                .send({
-                    email: 'login@test.com',
-                    password: 'Password123!'
-                });
+            const response = await request(app).post('/api/auth/login').send({
+                email: 'login@test.com',
+                password: 'Password123!',
+            });
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -60,12 +52,10 @@ describe('Auth Routes Integration', () => {
         });
 
         it('should fail with wrong password', async () => {
-            const response = await request(app)
-                .post('/api/auth/login')
-                .send({
-                    email: 'login@test.com',
-                    password: 'WrongPassword123!'
-                });
+            const response = await request(app).post('/api/auth/login').send({
+                email: 'login@test.com',
+                password: 'WrongPassword123!',
+            });
 
             expect(response.status).toBe(401);
             expect(response.body.success).toBe(false);

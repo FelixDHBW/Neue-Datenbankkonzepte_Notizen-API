@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import User from '../models/User';
 import Note from '../models/Note';
 
- //Liste aller registrierten Benutzer (US-13)
+//Liste aller registrierten Benutzer (US-13)
 
 export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
     // Alle Benutzer abrufen ohne Passwort-Hash (US-13)
@@ -30,7 +30,10 @@ export const manageUserStatus = async (req: Request, res: Response): Promise<voi
 
     // Admin darf sich nicht selbst löschen
     if (user._id.toString() === req.user!._id.toString()) {
-        res.status(400).json({ success: false, message: 'Eigenes Konto kann nicht gelöscht werden.' });
+        res.status(400).json({
+            success: false,
+            message: 'Eigenes Konto kann nicht gelöscht werden.',
+        });
         return;
     }
 

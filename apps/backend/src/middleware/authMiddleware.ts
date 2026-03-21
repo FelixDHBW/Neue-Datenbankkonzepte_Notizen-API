@@ -27,7 +27,10 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
 
     // Bearer-Token aus dem Header extrahieren
     if (!authHeader?.startsWith('Bearer ')) {
-        res.status(401).json({ success: false, message: 'Kein Zugriffstoken vorhanden. Zugriff verweigert.' });
+        res.status(401).json({
+            success: false,
+            message: 'Kein Zugriffstoken vorhanden. Zugriff verweigert.',
+        });
         return;
     }
 
@@ -47,7 +50,10 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
         // Benutzer aus der DB laden und an req hängen
         const user = await User.findById(decoded.id);
         if (!user) {
-            res.status(401).json({ success: false, message: 'Benutzer nicht gefunden. Token ungültig.' });
+            res.status(401).json({
+                success: false,
+                message: 'Benutzer nicht gefunden. Token ungültig.',
+            });
             return;
         }
 
@@ -55,6 +61,9 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
         next();
     } catch {
         // Manipulierte oder abgelaufene Tokens abfangen (FA-07)
-        res.status(401).json({ success: false, message: 'Token ungültig oder abgelaufen. Zugriff verweigert.' });
+        res.status(401).json({
+            success: false,
+            message: 'Token ungültig oder abgelaufen. Zugriff verweigert.',
+        });
     }
 };

@@ -2,21 +2,27 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
- //Registriert einen neuen Benutzer (US-01)
+//Registriert einen neuen Benutzer (US-01)
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
     // Pflichtfelder prüfen (US-01)
     if (!email || !password) {
-        res.status(400).json({ success: false, message: 'E-Mail und Passwort sind Pflichtfelder.' });
+        res.status(400).json({
+            success: false,
+            message: 'E-Mail und Passwort sind Pflichtfelder.',
+        });
         return;
     }
 
     // E-Mail-Einzigartigkeit prüfen (US-01)
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-        res.status(409).json({ success: false, message: 'Ein Konto mit dieser E-Mail-Adresse existiert bereits.' });
+        res.status(409).json({
+            success: false,
+            message: 'Ein Konto mit dieser E-Mail-Adresse existiert bereits.',
+        });
         return;
     }
 
@@ -36,7 +42,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     });
 };
 
-
 //Meldet einen Benutzer an und gibt einen JWT zurück (US-02)
 
 export const login = async (req: Request, res: Response): Promise<void> => {
@@ -44,7 +49,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     // Pflichtfelder prüfen (US-02)
     if (!email || !password) {
-        res.status(400).json({ success: false, message: 'E-Mail und Passwort sind Pflichtfelder.' });
+        res.status(400).json({
+            success: false,
+            message: 'E-Mail und Passwort sind Pflichtfelder.',
+        });
         return;
     }
 
@@ -67,7 +75,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = jwt.sign(
         { id: user._id, role: user.role }, // Payload: Benutzer-ID und Rolle (FA-07)
         jwtSecret,
-        { expiresIn: '8h' }                // Token läuft nach 8 Stunden ab
+        { expiresIn: '8h' } // Token läuft nach 8 Stunden ab
     );
 
     // Token und Benutzerinfo zurückgeben (FA-07)

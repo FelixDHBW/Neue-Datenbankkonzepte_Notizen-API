@@ -9,7 +9,7 @@ describe('NoteService', () => {
     beforeEach(async () => {
         const user = await User.create({
             email: 'test@example.com',
-            password: 'hashedPassword123'
+            password: 'hashedPassword123',
         });
         userId = user._id.toString();
     });
@@ -18,7 +18,7 @@ describe('NoteService', () => {
         it('should create a note successfully', async () => {
             const result = await noteService.createNote(userId, {
                 title: 'Test Note',
-                content: 'Test Content'
+                content: 'Test Content',
             });
 
             expect(result.success).toBe(true);
@@ -29,7 +29,7 @@ describe('NoteService', () => {
         it('should fail without title', async () => {
             const result = await noteService.createNote(userId, {
                 title: '',
-                content: 'Test Content'
+                content: 'Test Content',
             });
 
             expect(result.success).toBe(false);
@@ -41,7 +41,7 @@ describe('NoteService', () => {
         beforeEach(async () => {
             await Note.create([
                 { title: 'Note 1', content: 'Content 1', userId },
-                { title: 'Note 2', content: 'Content 2', userId }
+                { title: 'Note 2', content: 'Content 2', userId },
             ]);
         });
 
@@ -66,7 +66,7 @@ describe('NoteService', () => {
             const note = await Note.create({
                 title: 'To Delete',
                 content: 'Content',
-                userId
+                userId,
             });
 
             const result = await noteService.deleteNote(userId, note._id.toString());
