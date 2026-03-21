@@ -1,7 +1,7 @@
 {
     "name": "backend",
     "version": "1.0.0",
-    "description": "",
+    "description": "Express.js Backend API für Notizen-Verwaltung",
     "main": "dist/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,18 +10,13 @@
         "build": "tsc",
         "seed": "ts-node src/seed.ts"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git"
-    },
-    "keywords": [],
+    "keywords": ["express", "mongodb", "api", "notizen"],
     "author": "",
     "license": "ISC",
     "type": "commonjs",
     "bugs": {
         "url": "https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API/issues"
     },
-    "homepage": "https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API#readme",
     "devDependencies": {
         "@types/bcryptjs": "^2.4.6",
         "@types/cors": "^2.8.19",

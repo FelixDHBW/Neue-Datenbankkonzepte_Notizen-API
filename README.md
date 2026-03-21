@@ -79,7 +79,6 @@ cd ..
 ### Schritt 4: Datenbank mit Testdaten füllen (optional)
 
 ```bash
-cd backend
 npm run seed
 ```
 
@@ -90,35 +89,43 @@ Dieser Befehl erstellt:
 
 ## Anwendung starten
 
-Du benötigst **zwei Terminals**, um Backend und Frontend gleichzeitig zu starten:
+### Alle Services gleichzeitig starten (empfohlen)
 
-### Terminal 1: Backend starten
+```bash
+npm run dev
+```
 
+Dieser Befehl startet **Backend** und **Frontend** gleichzeitig:
+- Backend: `http://localhost:5000`
+- Frontend: `http://localhost:5173`
+
+### Einzelne Services starten
+
+**Nur Backend:**
+```bash
+npm run dev:backend
+```
+
+**Nur Frontend:**
+```bash
+npm run dev:frontend
+```
+
+### Manuelles Starten (alternativ)
+
+Wenn du Services in separaten Terminals starten möchtest:
+
+**Terminal 1 - Backend:**
 ```bash
 cd backend
 npm run dev
 ```
 
-Das Backend läuft dann auf `http://localhost:5000`
-
-### Terminal 2: Frontend starten
-
+**Terminal 2 - Frontend:**
 ```bash
 cd frontend
 npm run dev
 ```
-
-Das Frontend läuft dann auf `http://localhost:5173`
-
-### Alternative: Schnellstart
-
-Wenn du nur das Backend brauchst (z.B. für API-Tests mit Postman):
-
-```bash
-npm run dev
-```
-
-(Dieser Befehl startet nur das Backend aus dem Root-Verzeichnis.)
 
 ## Nutzung
 
