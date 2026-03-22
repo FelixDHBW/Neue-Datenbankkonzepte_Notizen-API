@@ -15,8 +15,12 @@ import {
     isAuthenticated,
     getCurrentUser,
     extractUniqueTags,
+    getAllUsers,
+    deleteUser,
+    getAllNotesAdmin,
     Note,
     CreateNoteData,
+    User,
 } from './api';
 
 // ============================================
@@ -34,6 +38,7 @@ const tabBtns = document.querySelectorAll('.tab-btn');
 const header = document.getElementById('header') as HTMLElement;
 const userInfo = document.getElementById('user-info') as HTMLElement;
 const btnLogout = document.getElementById('btn-logout') as HTMLButtonElement;
+const btnAdmin = document.getElementById('btn-admin') as HTMLButtonElement;
 
 // Dashboard
 const dashboardSection = document.getElementById('dashboard-section') as HTMLElement;
@@ -67,6 +72,19 @@ const noteDetailContent = document.getElementById('note-detail-content') as HTML
 const btnBack = document.getElementById('btn-back') as HTMLButtonElement;
 const btnEdit = document.getElementById('btn-edit') as HTMLButtonElement;
 const btnDelete = document.getElementById('btn-delete') as HTMLButtonElement;
+
+// Admin-Bereich
+const adminSection = document.getElementById('admin-section') as HTMLElement;
+const adminNavBtns = document.querySelectorAll('.admin-nav-btn');
+const adminUsersTab = document.getElementById('admin-users-tab') as HTMLElement;
+const adminNotesTab = document.getElementById('admin-notes-tab') as HTMLElement;
+const adminStatsTab = document.getElementById('admin-stats-tab') as HTMLElement;
+const usersTable = document.getElementById('users-table') as HTMLTableElement;
+const notesTable = document.getElementById('notes-table') as HTMLTableElement;
+const totalUsersStat = document.getElementById('total-users-stat') as HTMLElement;
+const totalNotesStat = document.getElementById('total-notes-stat') as HTMLElement;
+const avgNotesPerUserStat = document.getElementById('avg-notes-per-user-stat') as HTMLElement;
+const recentActivityStat = document.getElementById('recent-activity-stat') as HTMLElement;
 
 // Loading & Toast
 const loadingOverlay = document.getElementById('loading-overlay') as HTMLElement;
@@ -653,6 +671,207 @@ function debounce<T extends (...args: unknown[]) => unknown>(
         timeout = setTimeout(() => func(...args), wait);
     };
 }
+
+// ============================================
+// ADMIN-FUNKTIONALITÄT
+// ============================================
+
+// Admin-Bereich anzeigen/verstecken
+const showAdminSection = () => {
+    dashboardSection.style.display = 'none';
+    noteFormSection.style.display = 'none';
+    noteDetailSection.style.display = 'none';
+    adminSection.style.display = 'block';
+    showAdminUsersTab();
+};
+
+const hideAdminSection = () => {
+    adminSection.style.display = 'none';
+    dashboardSection.style.display = 'block';
+};
+
+// Admin-Tabs wechseln
+const showAdminUsersTab = () => {
+    adminUsersTab.style.display = 'block';
+    adminNotesTab.style.display = 'none';
+    adminStatsTab.style.display = 'none';
+    adminNavBtns.forEach(btn => btn.classList.remove('active'));
+    document.querySelector('[data-tab="users"]')?.classList.add('active');
+    loadUsers();
+};
+
+const showAdminNotesTab = () => {
+    adminUsersTab.style.display = 'none';
+    adminNotesTab.style.display = 'block';
+    adminStatsTab.style.display = 'none';
+    adminNavBtns.forEach(btn => btn.classList.remove('active'));
+    document.querySelector('[data-tab="notes"]')?.classList.add('active');
+    loadAdminNotes();
+};
+
+const showAdminStatsTab = () => {
+    adminUsersTab.style.display = 'none';
+    adminNotesTab.style.display = 'none';
+    adminStatsTab.style.display = 'block';
+    adminNavBtns.forEach(btn => btn.classList.remove('active'));
+    document.querySelector('[data-tab="stats"]')?.classList.add('active');
+    loadStats();
+};
+
+// Benutzer laden und anzeigen
+const loadUsers = async () => {
+    try {
+        showLoading();
+        const response = await getAllUsers();
+        if (response.success && response.data) {
+            renderUsers(response.data);
+        } else {
+            showToast('Fehler beim Laden der Benutzer', 'error');
+        }
+    } catch (error) {
+        showToast('Fehler beim Laden der Benutzer', 'error');
+    } finally {
+        hideLoading();
+    }
+};
+
+const renderUsers = (users: User[]) => {
+    const tbody = usersTable.querySelector('tbody') || usersTable.createTBody();
+    tbody.innerHTML = '';
+
+    users.forEach(user => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${escapeHtml(user.email)}</td>
+            <td>${escapeHtml(user.role)}</td>
+            <td>${new Date(user.createdAt).toLocaleDateString('de-DE')}</td>
+            <td>
+                <button class="btn btn-danger btn-sm" onclick="deleteUserHandler('${user._id}')">Löschen</button>
+            </td>
+        `;
+    });
+};
+
+// Admin-Notizen laden
+const loadAdminNotes = async () => {
+    try {
+        showLoading();
+        const response = await getAllNotesAdmin();
+        if (response.success && response.data) {
+            renderAdminNotes(response.data);
+        } else {
+            showToast('Fehler beim Laden der Notizen', 'error');
+        }
+    } catch (error) {
+        showToast('Fehler beim Laden der Notizen', 'error');
+    } finally {
+        hideLoading();
+    }
+};
+
+const renderAdminNotes = (notes: (Note & { user?: User })[]) => {
+    const tbody = notesTable.querySelector('tbody') || notesTable.createTBody();
+    tbody.innerHTML = '';
+
+    notes.forEach(note => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td>${escapeHtml(note.title)}</td>
+            <td>${escapeHtml(note.user?.email || 'Unbekannt')}</td>
+            <td>${escapeHtml(note.priority || '')}</td>
+            <td>${new Date(note.createdAt).toLocaleDateString('de-DE')}</td>
+            <td>${note.tags?.join(', ') || ''}</td>
+        `;
+    });
+};
+
+// Statistiken laden
+const loadStats = async () => {
+    try {
+        showLoading();
+        const usersResponse = await getAllUsers();
+        const notesResponse = await getAllNotesAdmin();
+
+        if (usersResponse.success && notesResponse.success) {
+            const users = usersResponse.data || [];
+            const notes = notesResponse.data || [];
+
+            totalUsersStat.textContent = users.length.toString();
+            totalNotesStat.textContent = notes.length.toString();
+            
+            const avgNotes = users.length > 0 ? (notes.length / users.length).toFixed(1) : '0';
+            avgNotesPerUserStat.textContent = avgNotes;
+            
+            const recentActivity = notes
+                .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+                .slice(0, 5)
+                .length;
+            recentActivityStat.textContent = recentActivity.toString();
+        }
+    } catch (error) {
+        showToast('Fehler beim Laden der Statistiken', 'error');
+    } finally {
+        hideLoading();
+    }
+};
+
+// Benutzer löschen
+const deleteUserHandler = async (userId: string) => {
+    if (!confirm('Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?')) {
+        return;
+    }
+
+    try {
+        showLoading();
+        const response = await deleteUser(userId);
+        if (response.success) {
+            showToast('Benutzer erfolgreich gelöscht', 'success');
+            loadUsers();
+        } else {
+            showToast(response.message || 'Fehler beim Löschen des Benutzers', 'error');
+        }
+    } catch (error) {
+        showToast('Fehler beim Löschen des Benutzers', 'error');
+    } finally {
+        hideLoading();
+    }
+};
+
+// Admin-Navigation Event-Listener
+adminNavBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-tab');
+        switch (tab) {
+            case 'users':
+                showAdminUsersTab();
+                break;
+            case 'notes':
+                showAdminNotesTab();
+                break;
+            case 'stats':
+                showAdminStatsTab();
+                break;
+        }
+    });
+});
+
+// Admin-Button Event-Listener
+btnAdmin.addEventListener('click', () => {
+    const user = getCurrentUser();
+    if (user && user.role === 'admin') {
+        showAdminSection();
+    } else {
+        showToast('Zugriff verweigert: Nur Administratoren können diesen Bereich nutzen', 'error');
+    }
+});
+
+// Zurück-Button für Admin-Bereich
+const btnBackAdmin = document.createElement('button');
+btnBackAdmin.className = 'btn btn-secondary';
+btnBackAdmin.textContent = 'Zurück zum Dashboard';
+btnBackAdmin.style.marginBottom = '20px';
+btnBackAdmin.addEventListener('click', hideAdminSection);
+adminSection.querySelector('.admin-header')?.appendChild(btnBackAdmin);
 
 // ============================================
 // APP STARTEN
