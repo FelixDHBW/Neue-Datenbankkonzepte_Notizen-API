@@ -43,43 +43,81 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 
 ## 📋 Voraussetzungen
 
-- **Node.js** ≥ 18 — [Download](https://nodejs.org/) (LTS empfohlen)
-- **MongoDB** (lokal oder Atlas) — [Download](https://www.mongodb.com/try/download/community)
-- **Docker Desktop** *(optional, für Docker-Betrieb)* — [Download](https://www.docker.com/products/docker-desktop)
+### Für alle Optionen benötigt:
+
+**Docker Desktop**
+1. Öffne [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+2. Lade Docker Desktop für dein Betriebssystem herunter und installiere es
+3. Starte Docker Desktop und warte, bis das Symbol in der Taskleiste **grün** wird
+
+> ⚠️ **Docker Desktop muss immer im Hintergrund laufen**, wenn du das Projekt startest.
+
+### Zusätzlich für lokale Entwicklung:
+
+**Node.js (Version 18 oder neuer)**
+1. Öffne [https://nodejs.org/](https://nodejs.org/)
+2. Klicke auf **"LTS"** und lade den Installer herunter
+3. Führe den Installer aus (alle Standardeinstellungen übernehmen)
+4. Überprüfe die Installation:
+   ```bash
+   node --version
+   # Ausgabe: v20.x.x oder höher
+   ```
+
+**Git**
+1. Öffne [https://git-scm.com/downloads](https://git-scm.com/downloads)
+2. Lade Git herunter und installiere es
 
 ---
 
-## 🚀 Schnellstart
+## 🚀 Option 1: Docker Compose *(empfohlen)*
 
-### Option 1: Alles per Docker Compose
+Der einfachste Weg — alles läuft in Containern, keine weitere Konfiguration nötig.
+
+### Schritt 1: Repository klonen
 
 ```bash
-# Repository klonen
 git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
 cd Neue-Datenbankkonzepte_Notizen-API
-
-# Alle Services starten (MongoDB + Backend + Frontend)
-npm run docker:up
 ```
+
+### Schritt 2: Alle Services starten
+
+```bash
+docker-compose up --build
+```
+
+> Beim ersten Start werden die Docker-Images gebaut — das dauert 2–5 Minuten. Danach geht es schneller.
+
+Warte, bis im Terminal folgende Meldungen erscheinen:
+- `Server läuft auf Port 5000`
+- `Local: http://localhost:5173`
+
+### Schritt 3: Im Browser öffnen
 
 | Service | URL |
 |---|---|
+| 🎨 Frontend | [http://localhost:5173](http://localhost:5173) |
+| 🖥️ Backend API | [http://localhost:5000](http://localhost:5000) |
 | 🗄️ MongoDB | `localhost:27017` |
-| 🖥️ Backend API | http://localhost:5000 |
-| 🎨 Frontend | http://localhost:5173 |
+
+### Services stoppen
 
 ```bash
-# Services stoppen
-npm run docker:down
-```
+# Strg+C im Terminal, dann:
+docker-compose down
 
-> ⚠️ **Docker Desktop muss laufen.** Falls der Fehler `dockerDesktopLinuxEngine` erscheint, Docker Desktop neu starten und warten bis das Symbol in der Taskleiste grün wird.
+# Oder stoppen inkl. Datenbank leeren:
+docker-compose down -v
+```
 
 ---
 
-### Option 2: Lokale Entwicklung
+## 💻 Option 2: Lokale Entwicklung *(für Entwickler mit Hot-Reload)*
 
-#### 1. Repository klonen & Dependencies installieren
+Ideal wenn du am Code arbeitest — Änderungen werden sofort im Browser sichtbar.
+
+### Schritt 1: Repository klonen & Dependencies installieren
 
 ```bash
 git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
@@ -87,17 +125,31 @@ cd Neue-Datenbankkonzepte_Notizen-API
 npm install
 ```
 
-#### 2. Umgebungsvariablen konfigurieren
+### Schritt 2: MongoDB per Docker starten
 
 ```bash
-# Windows (CMD)
-copy apps\backend\.env.example apps\backend\.env
+docker-compose up -d mongodb
+```
 
-# Windows (PowerShell) / Mac / Linux
+Überprüfe, ob der Container läuft:
+```bash
+docker ps
+# Du solltest einen Container namens "mongodb" sehen
+```
+
+### Schritt 3: Umgebungsvariablen einrichten
+
+**Windows (CMD):**
+```cmd
+copy apps\backend\.env.example apps\backend\.env
+```
+
+**Windows (PowerShell) / Mac / Linux:**
+```bash
 cp apps/backend/.env.example apps/backend/.env
 ```
 
-Die `.env`-Datei ist bereits für lokale MongoDB vorkonfiguriert:
+Die Datei ist bereits vollständig vorkonfiguriert — **du musst nichts ändern**:
 
 ```env
 PORT=5000
@@ -106,61 +158,74 @@ JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
 NODE_ENV=development
 ```
 
-#### 3. Testdaten einfügen (optional)
+> 💡 Der `MONGO_URI` zeigt auf den MongoDB-Container (`localhost:27017`), der von Docker Compose gestartet wird. **Dieser Wert ist für alle Entwickler identisch.**
+
+### Schritt 4: Anwendung starten
+
+```bash
+npm run dev
+```
+
+Warte, bis beide Services bereit sind:
+
+| Service | URL | Bereit wenn... |
+|---|---|---|
+| 🖥️ Backend | [http://localhost:5000](http://localhost:5000) | `Server läuft auf Port 5000` erscheint |
+| 🎨 Frontend | [http://localhost:5173](http://localhost:5173) | `Local: http://localhost:5173` erscheint |
+
+### Anwendung stoppen
+
+```bash
+# Strg+C im Terminal (stoppt Backend & Frontend)
+
+# MongoDB-Container stoppen
+docker-compose down
+```
+
+---
+
+## 🌱 Testdaten einfügen (optional)
+
+Um die Anwendung mit Beispieldaten zu befüllen:
 
 ```bash
 npm run seed
 ```
 
-Erstellt folgende Testkonten:
+Danach kannst du dich mit diesen Testkonten anmelden:
+
 | Rolle | E-Mail | Passwort |
 |---|---|---|
 | 👑 Admin | `admin@example.com` | `AdminPassword123!` |
 | 👤 Benutzer | `user@example.com` | `UserPassword123!` |
 
-#### 4. Anwendung starten
-
-```bash
-# Backend UND Frontend gleichzeitig starten
-npm run dev
-```
-
-| Service | URL |
-|---|---|
-| 🖥️ Backend | http://localhost:5000 |
-| 🎨 Frontend | http://localhost:5173 |
-
 ---
 
-## 🔀 Einzeln starten
+## ❓ Häufige Probleme
 
-### Nur Backend
+### „Cannot connect to MongoDB" / Datenbankfehler
+→ Docker Desktop läuft nicht. Starte Docker Desktop, warte bis es grün ist, dann erneut versuchen.
 
+### „Port 5000 already in use"
+→ Ein anderes Programm nutzt Port 5000. Beende es oder ändere `PORT=5001` in `apps/backend/.env`.
+
+### „Port 5173 already in use"
+→ Ein anderer Vite-Dev-Server läuft noch. Beende ihn mit `Strg+C` oder starte das Frontend auf einem anderen Port:
 ```bash
-npm run dev -w backend
-# oder direkt:
-cd apps/backend && npm run dev
+npm run dev -w frontend -- --port 5174
 ```
 
-### Nur Frontend
+### „npm: command not found"
+→ Node.js ist nicht installiert. Installiere Node.js (siehe Voraussetzungen).
 
+### Frontend zeigt alte Daten / lädt nicht richtig
+→ Vite-Cache leeren:
 ```bash
-npm run dev -w frontend
-# oder direkt:
-cd apps/frontend && npm run dev
+cd apps/frontend && npx vite --force
 ```
 
-### Hybrid: Nur DB per Docker, Code lokal
-
-```bash
-# Nur MongoDB als Container starten
-docker-compose up -d mongodb
-
-# Backend & Frontend lokal starten (mit Hot-Reload)
-npm run dev
-```
-
-> 💡 Ideal für die Entwicklung — Hot-Reload funktioniert lokal schneller als im Container.
+### Docker-Fehler: `dockerDesktopLinuxEngine`
+→ Docker Desktop neu starten und warten bis das Symbol in der Taskleiste grün wird.
 
 ---
 
@@ -170,16 +235,13 @@ npm run dev
 
 | Script | Beschreibung |
 |---|---|
-| `npm run dev` | Backend + Frontend parallel starten |
+| `npm run dev` | Backend + Frontend parallel starten (lokal) |
 | `npm run build` | Backend + Frontend bauen |
 | `npm run seed` | Datenbank mit Testdaten füllen |
-| `npm run test` | Alle Tests ausführen |
-| `npm run test:watch` | Tests im Watch-Modus |
-| `npm run test:coverage` | Tests mit Coverage-Report |
 | `npm run lint` | ESLint für beide Projekte |
 | `npm run lint:fix` | ESLint mit automatischer Fehlerbehebung |
 | `npm run format` | Prettier Formatierung |
-| `npm run docker:up` | Docker Compose starten |
+| `npm run docker:up` | Alle Services per Docker Compose starten |
 | `npm run docker:down` | Docker Compose stoppen |
 
 ### Backend-Spezifisch
@@ -189,7 +251,6 @@ npm run dev
 | `npm run dev -w backend` | Dev-Server mit Hot-Reload |
 | `npm run build -w backend` | TypeScript kompilieren |
 | `npm run start -w backend` | Kompilierte App starten |
-| `npm run test -w backend` | Tests ausführen |
 
 ### Frontend-Spezifisch
 
@@ -293,46 +354,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 │   │   │   ├── 📁 types/           # TypeScript-Typen
 │   │   │   ├── index.ts            # Einstiegspunkt
 │   │   │   └── seed.ts             # Testdaten-Skript
+│   │   ├── 📄 .env.example         # Vorlage für Umgebungsvariablen
 │   │   ├── 📄 Dockerfile
 │   │   ├── 📄 package.json
 │   │   └── 📄 tsconfig.json
 │   └── 📁 frontend/                # Vite + TypeScript Client
 │       ├── 📁 src/
-│       │   ├── api.ts              # API-Kommunikation
-│       │   ├── main.ts             # App-Logik & UI
+│       │   ├── 📁 api/             # API-Kommunikation
+│       │   ├── 📁 views/           # UI-Komponenten
+│       │   ├── 📁 types/           # TypeScript-Typen
+│       │   ├── 📁 utils/           # Hilfsfunktionen
+│       │   ├── main.ts             # App-Einstiegspunkt
 │       │   └── styles.css          # Styling
-│       ├── 📄 index.html           # Einstiegspunkt
+│       ├── 📄 index.html           # HTML-Einstiegspunkt
 │       ├── 📄 Dockerfile
 │       └── 📄 package.json
 ├── 📁 documents/                   # Projektdokumentation
 ├── 📄 docker-compose.yml           # Docker Compose Konfiguration
 ├── 📄 package.json                 # Root Package (Workspaces)
 └── 📄 README.md
-```
-
----
-
-## 🐳 Docker-Entwicklung
-
-```bash
-# Alle Services bauen und starten
-docker-compose up --build
-
-# Im Hintergrund starten
-docker-compose up -d
-
-# Logs eines Services anzeigen
-docker-compose logs -f backend
-docker-compose logs -f frontend
-
-# Einen Service neu starten
-docker-compose restart backend
-
-# Stoppen und Container entfernen
-docker-compose down
-
-# Stoppen inkl. Volumes (Datenbank wird geleert)
-docker-compose down -v
 ```
 
 ---
