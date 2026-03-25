@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Model } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 // Erlaubte Benutzerrollen (Rollenmodell)
@@ -17,9 +17,6 @@ export interface IUser extends Document {
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-// Interface für das User-Modell
-export interface IUserModel extends Model<IUser> {}
-
 const UserSchema = new Schema<IUser>(
     {
         // Pflichtfeld, unique, normalisiert (US-01)
@@ -31,7 +28,7 @@ const UserSchema = new Schema<IUser>(
             trim: true,
         },
 
-        // flichtfeld, min. 6 Zeichen, wird gehasht gespeichert (US-01, NFA-04)
+        // Pflichtfeld, min. 6 Zeichen, wird gehasht gespeichert (US-01, NFA-04)
         password: {
             type: String,
             required: [true, 'Passwort ist ein Pflichtfeld.'],
@@ -68,6 +65,6 @@ UserSchema.methods.comparePassword = async function (candidatePassword: string):
     return bcrypt.compare(candidatePassword, this.password);
 };
 
-const User: IUserModel = mongoose.model<IUser, IUserModel>('User', UserSchema);
+const User = mongoose.model<IUser>('User', UserSchema);
 
 export default User;

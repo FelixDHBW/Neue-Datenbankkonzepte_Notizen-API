@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Model, Types } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 // --- Typen & Interfaces ---
 
@@ -28,9 +28,6 @@ export interface INote extends Document {
     createdAt: Date;
     updatedAt: Date;
 }
-
-// Interface für das Mongoose-Modell
-export interface INoteModel extends Model<INote> {}
 
 const ChecklistItemSchema = new Schema<IChecklistItem>(
     {
@@ -73,7 +70,7 @@ const NoteSchema = new Schema<INote>(
             type: String,
             enum: {
                 values: Object.values(NotePriority),
-                message: `Priorität muss 'low', 'medium' oder 'high' sein.`,
+                message: "Priorität muss 'low', 'medium' oder 'high' sein.",
             },
             default: null,
         },
@@ -103,6 +100,6 @@ const NoteSchema = new Schema<INote>(
     }
 );
 
-const Note: INoteModel = mongoose.model<INote, INoteModel>('Note', NoteSchema);
+const Note = mongoose.model<INote>('Note', NoteSchema);
 
 export default Note;

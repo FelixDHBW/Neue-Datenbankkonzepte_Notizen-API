@@ -14,7 +14,7 @@ export type { INoteFilterOptions, ICreateNoteData, IUpdateNoteData } from './not
 
 // Auth Service
 export { AuthService, authService } from './authService.js';
-export type { IRegisterData, ILoginData, IRegisterResult, ILoginResult } from './authService.js';
+export type { IAuthData, IRegisterResult, ILoginResult } from './authService.js';
 
 // Admin Service
 export { AdminService, adminService } from './adminService.js';

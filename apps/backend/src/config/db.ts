@@ -1,7 +1,4 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const connectDB = async (): Promise<void> => {
     try {
@@ -14,6 +11,7 @@ const connectDB = async (): Promise<void> => {
 
         const conn = await mongoose.connect(mongoUri);
         console.log(`MongoDB verbunden: ${conn.connection.host}`);
+        console.log(`Datenbank-Name: ${conn.connection.name}`);
     } catch (error) {
         if (error instanceof Error) {
             console.error(`Fehler: ${error.message}`);

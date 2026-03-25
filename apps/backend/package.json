@@ -4,7 +4,9 @@
     "description": "Express.js Backend API für Notizen-Verwaltung",
     "main": "dist/index.js",
     "scripts": {
+        "prestart": "echo Starting backend...",
         "start": "node --experimental-specifier-resolution=node dist/index.js",
+        "predev": "echo Starting backend dev server...",
         "dev": "tsx watch src/index.ts",
         "build": "tsc",
         "seed": "tsx src/seed.ts",

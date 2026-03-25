@@ -83,6 +83,21 @@ body {
     font-size: 0.875rem;
 }
 
+.btn-admin {
+    background-color: var(--warning-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-admin:hover {
+    background-color: #d97706;
+}
+
 /* ============================================
    MAIN CONTENT
    ============================================ */
@@ -946,10 +961,16 @@ body {
     font-weight: 500;
 }
 
-.stat-number {
+.stat-value {
     font-size: 2rem;
     font-weight: 700;
     color: var(--primary-color);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
 }
 
 /* Responsive Admin */
@@ -1002,7 +1023,7 @@ body {
         padding: 1rem;
     }
     
-    .stat-number {
+    .stat-value {
         font-size: 1.5rem;
     }
 }

@@ -8,19 +8,10 @@ interface JwtPayload {
     role: string;
 }
 
-// Erweitert Express Request um req.user (FA-07)
-declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace Express {
-        interface Request {
-            user?: IUser;
-        }
-    }
-}
-
 /**
  * protect prüft ob ein gültiger JWT im Authorization-Header vorhanden ist (FA-07)
  * Hängt den Benutzer bei Erfolg an req.user an.
+ * Die Typerweiterung für req.user ist in src/types/index.d.ts definiert.
  */
 export const protect = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const authHeader = req.headers.authorization;
@@ -57,7 +48,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
             return;
         }
 
-        req.user = user;
+        req.user = user as IUser;
         next();
     } catch {
         // Manipulierte oder abgelaufene Tokens abfangen (FA-07)
