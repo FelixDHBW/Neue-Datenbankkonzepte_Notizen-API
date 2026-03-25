@@ -14,7 +14,12 @@
         "lint:fix": "eslint src/**/*.ts --fix",
         "format": "prettier --write \"src/**/*.ts\""
     },
-    "keywords": ["express", "mongodb", "api", "notizen"],
+    "keywords": [
+        "express",
+        "mongodb",
+        "api",
+        "notizen"
+    ],
     "author": "",
     "license": "ISC",
     "type": "module",
@@ -27,15 +32,15 @@
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
         "@types/jsonwebtoken": "^9.0.10",
-        "@types/node": "^25.3.2",
+        "@types/node": "^25.5.0",
         "@typescript-eslint/eslint-plugin": "^8.0.0",
         "@typescript-eslint/parser": "^8.0.0",
         "eslint": "^9.0.0",
         "globals": "^15.0.0",
         "nodemon": "^3.1.14",
         "prettier": "^3.2.0",
-        "tsx": "^4.19.0",
         "ts-node": "^10.9.2",
+        "tsx": "^4.19.0",
         "typescript": "^5.9.3"
     },
     "dependencies": {
