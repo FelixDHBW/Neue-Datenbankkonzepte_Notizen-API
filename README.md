@@ -398,8 +398,9 @@ ISC
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autoren
 
 Entwickelt im Rahmen des Moduls **"Neue Datenbankkonzepte"** an der **DHBW Heidenheim**.
 
-Bei Fragen oder Problemen: [GitHub Issues](https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API/issues)
+- **Niklas Kiefer**
+- **Felix Guist**
