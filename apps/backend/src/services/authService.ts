@@ -83,6 +83,14 @@ export class AuthService {
             };
         }
 
+        // Gesperrtes Konto abweisen (US-14)
+        if (!user.isActive) {
+            return {
+                success: false,
+                message: 'Ihr Konto wurde gesperrt. Bitte wenden Sie sich an einen Administrator.',
+            };
+        }
+
         // JWT erstellen
         const jwtSecret = process.env.JWT_SECRET;
         if (!jwtSecret) {

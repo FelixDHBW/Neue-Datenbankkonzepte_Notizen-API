@@ -221,6 +221,7 @@ export interface User {
     _id: string;
     email: string;
     role: string;
+    isActive: boolean;
     createdAt: string;
 }
 
@@ -237,6 +238,20 @@ export const getAllUsers = async (): Promise<{
 export const deleteUser = async (id: string): Promise<{ success: boolean; message?: string }> => {
     return await fetchApi(`/admin/users/${id}`, {
         method: 'DELETE',
+    });
+};
+
+// Benutzer sperren (Admin) (US-14)
+export const banUser = async (id: string): Promise<{ success: boolean; data?: User; message?: string }> => {
+    return await fetchApi<User>(`/admin/users/${id}/ban`, {
+        method: 'PATCH',
+    });
+};
+
+// Benutzer entsperren (Admin) (US-14)
+export const unbanUser = async (id: string): Promise<{ success: boolean; data?: User; message?: string }> => {
+    return await fetchApi<User>(`/admin/users/${id}/unban`, {
+        method: 'PATCH',
     });
 };
 

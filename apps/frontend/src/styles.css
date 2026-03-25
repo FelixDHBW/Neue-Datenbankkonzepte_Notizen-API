@@ -1132,3 +1132,52 @@ body {
 .btn-back-admin {
     display: none !important;
 }
+
+/* ============================================
+   ZURÜCK-BUTTONS – verbessertes Design
+   ============================================ */
+
+/* Basis-Style für beide Zurück-Buttons */
+#btn-back,
+#btn-admin-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+}
+
+#btn-back::before,
+#btn-admin-back::before {
+    content: '←';
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+}
+
+#btn-back:hover,
+#btn-admin-back:hover {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    transform: translateY(-1px);
+}
+
+#btn-back:hover::before,
+#btn-admin-back:hover::before {
+    transform: translateX(-3px);
+}
+
+#btn-back:active,
+#btn-admin-back:active {
+    transform: translateY(0);
+    box-shadow: none;
+}

@@ -12,6 +12,7 @@ export interface IUser extends Document {
     email: string;
     password: string;
     role: UserRole;
+    isActive: boolean;
     createdAt: Date;
     // Passwortvergleich für den Login (NFA-04)
     comparePassword(candidatePassword: string): Promise<boolean>;
@@ -44,6 +45,12 @@ const UserSchema = new Schema<IUser>(
                 message: `Rolle muss '${UserRole.BENUTZER}' oder '${UserRole.ADMINISTRATOR}' sein.`,
             },
             default: UserRole.BENUTZER,
+        },
+
+        // Sperrstatus: false = gesperrt, true = aktiv (US-14)
+        isActive: {
+            type: Boolean,
+            default: true,
         },
     },
     {

@@ -17,6 +17,8 @@ import {
     extractUniqueTags,
     getAllUsers,
     deleteUser,
+    banUser,
+    unbanUser,
     getAllNotesAdmin,
     Note,
     CreateNoteData,
@@ -745,19 +747,44 @@ const renderUsers = (users: User[]) => {
 
     users.forEach((user) => {
         const row = tbody.insertRow();
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn btn-danger btn-sm';
-        deleteBtn.textContent = 'Löschen';
-        deleteBtn.addEventListener('click', () => deleteUserHandler(user._id));
+
+        // Status-Badge
+        const statusBadge = user.isActive
+            ? '<span style="color:#22c55e;font-weight:600;">✓ Aktiv</span>'
+            : '<span style="color:#ef4444;font-weight:600;">✗ Gesperrt</span>';
 
         row.innerHTML = `
             <td>${escapeHtml(user.email)}</td>
             <td>${escapeHtml(user.role)}</td>
+            <td>${statusBadge}</td>
             <td>${new Date(user.createdAt).toLocaleDateString('de-DE')}</td>
             <td></td>
         `;
-        // Löschen-Button sicher per Event-Listener einfügen (kein onclick-String)
-        row.lastElementChild?.appendChild(deleteBtn);
+
+        // Aktions-Buttons sicher per Event-Listener einfügen (kein onclick-String)
+        const actionsCell = row.lastElementChild!;
+
+        if (user.isActive) {
+            const banBtn = document.createElement('button');
+            banBtn.className = 'btn btn-warning btn-sm';
+            banBtn.textContent = 'Sperren';
+            banBtn.style.marginRight = '4px';
+            banBtn.addEventListener('click', () => banUserHandler(user._id));
+            actionsCell.appendChild(banBtn);
+        } else {
+            const unbanBtn = document.createElement('button');
+            unbanBtn.className = 'btn btn-success btn-sm';
+            unbanBtn.textContent = 'Entsperren';
+            unbanBtn.style.marginRight = '4px';
+            unbanBtn.addEventListener('click', () => unbanUserHandler(user._id));
+            actionsCell.appendChild(unbanBtn);
+        }
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn btn-danger btn-sm';
+        deleteBtn.textContent = 'Löschen';
+        deleteBtn.addEventListener('click', () => deleteUserHandler(user._id));
+        actionsCell.appendChild(deleteBtn);
     });
 };
 
@@ -847,6 +874,50 @@ const deleteUserHandler = async (userId: string) => {
     }
 };
 
+// Benutzer sperren (US-14)
+const banUserHandler = async (userId: string) => {
+    if (!confirm('Möchten Sie diesen Benutzer sperren? Er kann sich dann nicht mehr anmelden.')) {
+        return;
+    }
+
+    try {
+        showLoading();
+        const response = await banUser(userId);
+        if (response.success) {
+            showToast('Benutzer erfolgreich gesperrt', 'success');
+            loadUsers();
+        } else {
+            showToast(response.message || 'Fehler beim Sperren des Benutzers', 'error');
+        }
+    } catch {
+        showToast('Fehler beim Sperren des Benutzers', 'error');
+    } finally {
+        hideLoading();
+    }
+};
+
+// Benutzer entsperren (US-14)
+const unbanUserHandler = async (userId: string) => {
+    if (!confirm('Möchten Sie die Sperre für diesen Benutzer aufheben?')) {
+        return;
+    }
+
+    try {
+        showLoading();
+        const response = await unbanUser(userId);
+        if (response.success) {
+            showToast('Benutzer erfolgreich entsperrt', 'success');
+            loadUsers();
+        } else {
+            showToast(response.message || 'Fehler beim Entsperren des Benutzers', 'error');
+        }
+    } catch {
+        showToast('Fehler beim Entsperren des Benutzers', 'error');
+    } finally {
+        hideLoading();
+    }
+};
+
 // Admin-Navigation Event-Listener
 adminNavBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -892,6 +963,12 @@ if (oldBtns.length > 0) {
 const btnBackAdmin = document.getElementById('btn-admin-back') as HTMLButtonElement | null;
 if (btnBackAdmin) {
     btnBackAdmin.addEventListener('click', hideAdminSection);
+}
+
+// Klick auf den App-Titel führt zurück zum Dashboard
+const btnHome = document.getElementById('btn-home') as HTMLElement | null;
+if (btnHome) {
+    btnHome.addEventListener('click', () => showDashboard());
 }
 
 // ============================================

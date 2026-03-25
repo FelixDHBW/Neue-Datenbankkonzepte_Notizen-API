@@ -1,6 +1,50 @@
 import { Request, Response } from 'express';
 import { adminService } from '../services/index.js';
 
+// Benutzer sperren (isActive = false) (US-14)
+export const banUser = async (req: Request, res: Response): Promise<void> => {
+    const id = String(req.params['id'] ?? '');
+
+    try {
+        const result = await adminService.banUser(id, req.user!._id.toString());
+
+        if (!result.success) {
+            const status = result.message === 'Benutzer nicht gefunden.' ? 404 : 400;
+            res.status(status).json({ success: false, message: result.message });
+            return;
+        }
+
+        res.status(200).json({ success: true, message: result.message, data: result.user });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Sperren des Benutzers.',
+        });
+    }
+};
+
+// Benutzer entsperren (isActive = true) (US-14)
+export const unbanUser = async (req: Request, res: Response): Promise<void> => {
+    const id = String(req.params['id'] ?? '');
+
+    try {
+        const result = await adminService.unbanUser(id);
+
+        if (!result.success) {
+            const status = result.message === 'Benutzer nicht gefunden.' ? 404 : 400;
+            res.status(status).json({ success: false, message: result.message });
+            return;
+        }
+
+        res.status(200).json({ success: true, message: result.message, data: result.user });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Entsperren des Benutzers.',
+        });
+    }
+};
+
 // Liste aller registrierten Benutzer (US-13)
 export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
     try {

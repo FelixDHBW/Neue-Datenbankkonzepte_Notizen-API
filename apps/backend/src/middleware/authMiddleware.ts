@@ -48,6 +48,15 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
             return;
         }
 
+        // Gesperrte Benutzer abweisen (US-14)
+        if (!user.isActive) {
+            res.status(403).json({
+                success: false,
+                message: 'Ihr Konto wurde gesperrt. Bitte wenden Sie sich an einen Administrator.',
+            });
+            return;
+        }
+
         req.user = user as IUser;
         next();
     } catch {
