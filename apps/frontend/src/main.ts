@@ -678,12 +678,20 @@ const showAdminSection = () => {
     noteFormSection.style.display = 'none';
     noteDetailSection.style.display = 'none';
     adminSection.style.display = 'block';
+    // Admin-Button im Header ausblenden, damit er nicht als zweiter "Zurück"-Button wirkt
+    const adminBtn = document.getElementById('btn-admin') as HTMLButtonElement | null;
+    if (adminBtn) adminBtn.style.display = 'none';
+    // Alle dynamisch erstellten alten Zurück-Buttons entfernen (Schutz gegen gecachten alten Code)
+    adminSection.querySelectorAll('.btn-back-admin').forEach((el) => el.remove());
     showAdminUsersTab();
 };
 
 const hideAdminSection = () => {
     adminSection.style.display = 'none';
     dashboardSection.style.display = 'block';
+    // Admin-Button im Header wieder einblenden
+    const adminBtn = document.getElementById('btn-admin') as HTMLButtonElement | null;
+    if (adminBtn) adminBtn.style.display = 'inline-block';
 };
 
 // Admin-Tabs wechseln
@@ -873,19 +881,18 @@ const setupAdminButton = () => {
 };
 setupAdminButton();
 
-// Zurück-Button für Admin-Bereich erstellen und hinzufügen
-const createAdminBackButton = () => {
-    const adminHeader = adminSection.querySelector('.admin-header');
-    if (adminHeader && !adminHeader.querySelector('.btn-back-admin')) {
-        const btnBackAdmin = document.createElement('button');
-        btnBackAdmin.className = 'btn btn-secondary btn-back-admin';
-        btnBackAdmin.textContent = '← Zurück zum Dashboard';
-        btnBackAdmin.style.marginTop = '1rem';
-        btnBackAdmin.addEventListener('click', hideAdminSection);
-        adminHeader.appendChild(btnBackAdmin);
-    }
-};
-createAdminBackButton();
+// Alle dynamisch erstellten alten Zurück-Buttons entfernen (Bereinigung alter gecachter Versionen)
+const oldBtns = document.querySelectorAll('.btn-back-admin');
+if (oldBtns.length > 0) {
+    console.warn(`[Cleanup] ${oldBtns.length} alter Zurück-Button(s) gefunden und entfernt.`);
+    oldBtns.forEach((el) => el.remove());
+}
+
+// Zurück-Button für Admin-Bereich (statisch im HTML definiert)
+const btnBackAdmin = document.getElementById('btn-admin-back') as HTMLButtonElement | null;
+if (btnBackAdmin) {
+    btnBackAdmin.addEventListener('click', hideAdminSection);
+}
 
 // ============================================
 // APP STARTEN
