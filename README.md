@@ -1,296 +1,166 @@
-# Neue-Datenbankkonzepte_Notizen-API
+# 📝 Notizen-API
 
-Eine vollständige Notizen-API mit modernem Web-Frontend zur Verwaltung digitaler Notizen. Das Projekt wurde im Rahmen des Moduls "Neue Datenbankkonzepte" entwickelt und folgt modernen Best Practices für Full-Stack-Anwendungen.
+Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Frontend und MongoDB. Entwickelt im Rahmen des Moduls **"Neue Datenbankkonzepte"** an der DHBW Heidenheim.
+
+---
 
 ## ✨ Funktionen
 
-- ✅ **Benutzerverwaltung**: Registrierung und Login mit JWT-Authentifizierung
-- ✅ **Notizen CRUD**: Erstellen, Lesen, Aktualisieren, Löschen
-- ✅ **Optionale Attribute**: Tags, Prioritäten, Erinnerungsdaten
-- ✅ **Benutzerdefinierte Zusatzfelder**: Flexible Key-Value-Paare
-- ✅ **Checklisten**: Verschachtelte Aufgaben innerhalb von Notizen
-- ✅ **Filter & Suche**: Nach Tags, Prioritäten, Volltextsuche
-- ✅ **Admin-Funktionen**: Benutzer- und Notizenverwaltung
-- ✅ **Modernes Web-Frontend**: Responsive Design mit TypeScript
+| Bereich | Funktion |
+|---|---|
+| 🔐 **Auth** | Registrierung & Login mit JWT, Passwort-Hashing (bcrypt) |
+| 📝 **Notizen** | Erstellen, Lesen, Aktualisieren, Löschen (CRUD) |
+| 🏷️ **Tags & Filter** | Tags, Prioritäten (low/medium/high), Volltextsuche, Sortierung |
+| ⏰ **Erinnerungen** | Optionales Erinnerungsdatum pro Notiz |
+| 🔧 **Zusatzfelder** | Flexible Key-Value-Paare pro Notiz |
+| ✅ **Checklisten** | Verschachtelte Aufgaben innerhalb von Notizen |
+| 👑 **Admin-Bereich** | Benutzer- & Notizenverwaltung, Systemstatistiken |
+| 🎨 **Frontend** | Responsives Web-UI mit TypeScript & Vite |
+
+---
 
 ## 🛠️ Technologie-Stack
 
 ### Backend
-- **Node.js** mit **Express.js** (ES Modules)
+- **Node.js** + **Express.js** (ES Modules)
 - **TypeScript** mit strikter Typisierung
-- **MongoDB** mit **Mongoose**
+- **MongoDB** + **Mongoose** ODM
 - **JWT** für Authentifizierung
 - **bcryptjs** für Passwort-Hashing
 - **tsx** für TypeScript-Ausführung im Dev-Modus
 
 ### Frontend
-- **TypeScript**
-- **Vite** (Build-Tool und Dev-Server)
+- **TypeScript** (Vanilla)
+- **Vite** (Build-Tool & Dev-Server mit `--force` Cache-Busting)
 - **Vanilla CSS** (modernes, responsives Design)
 
-### Entwicklung & Testing
-- **Jest** mit Supertest für Unit- und Integrationstests
-- **ESLint** + **Prettier** für Code-Qualität
+### Infrastruktur & Tooling
 - **Docker Compose** für containerisierte Entwicklung
-- **npm Workspaces** für Monorepo-Management
+- **npm Workspaces** (Monorepo)
+- **ESLint** + **Prettier** für Code-Qualität
 
 ---
 
 ## 📋 Voraussetzungen
 
-### Erforderlich
-
-- **Node.js** (Version 18 oder höher) - [Download](https://nodejs.org/)
-  - Wählen Sie die LTS-Version (Long Term Support)
-  - Überprüfen Sie die Installation mit: `node --version`
-
-### Datenbank (empfohlen: Lokal)
-
-**Option A: MongoDB lokal ⭐ EMPFOHLEN**
-- **MongoDB Community Server** - [Download](https://www.mongodb.com/try/download/community)
-  - Für Windows: MongoDB Community Server + MongoDB Compass (GUI)
-  - Für Mac: MongoDB Community Edition über Homebrew (`brew tap mongodb/brew && brew install mongodb-community`)
-  - Für Linux: Paketmanager Ihrer Distribution
-- **Vorteile:** Schneller, keine Internetverbindung nötig, vollständige Kontrolle
-
-**Option B: MongoDB Atlas (Cloud) - Optional**
-- Nur wenn keine lokale Installation möglich ist
-- Kostenloses Konto unter [MongoDB Atlas](https://www.mongodb.com/atlas)
-- Internetverbindung erforderlich
-
-### Optional: Docker
-
-- **Docker Desktop** - [Download](https://www.docker.com/products/docker-desktop)
-  - Für Windows 10/11 (Pro/Home) oder Mac
-  - Linux: [Docker Engine](https://docs.docker.com/engine/install/) + [Docker Compose](https://docs.docker.com/compose/install/)
-  - Docker Compose wird automatisch mit Docker Desktop installiert
+- **Node.js** ≥ 18 — [Download](https://nodejs.org/) (LTS empfohlen)
+- **MongoDB** (lokal oder Atlas) — [Download](https://www.mongodb.com/try/download/community)
+- **Docker Desktop** *(optional, für Docker-Betrieb)* — [Download](https://www.docker.com/products/docker-desktop)
 
 ---
 
 ## 🚀 Schnellstart
 
-### Option 1: Mit Docker Compose (empfohlen)
-
-Die einfachste Methode, um das gesamte Projekt zu starten:
+### Option 1: Alles per Docker Compose
 
 ```bash
 # Repository klonen
 git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
 cd Neue-Datenbankkonzepte_Notizen-API
 
-# Alle Services starten (MongoDB, Backend, Frontend)
+# Alle Services starten (MongoDB + Backend + Frontend)
 npm run docker:up
-
-# Oder mit Docker Compose direkt
-docker-compose up -d
 ```
 
-**Verfügbare Services:**
-- 🗄️ **MongoDB**: http://localhost:27017
-- 🖥️ **Backend API**: http://localhost:5000
-- 🎨 **Frontend**: http://localhost:5173
+| Service | URL |
+|---|---|
+| 🗄️ MongoDB | `localhost:27017` |
+| 🖥️ Backend API | http://localhost:5000 |
+| 🎨 Frontend | http://localhost:5173 |
+
+```bash
+# Services stoppen
+npm run docker:down
+```
+
+> ⚠️ **Docker Desktop muss laufen.** Falls der Fehler `dockerDesktopLinuxEngine` erscheint, Docker Desktop neu starten und warten bis das Symbol in der Taskleiste grün wird.
+
+---
 
 ### Option 2: Lokale Entwicklung
 
-#### 1. Repository klonen
+#### 1. Repository klonen & Dependencies installieren
 
 ```bash
 git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
 cd Neue-Datenbankkonzepte_Notizen-API
-```
-
-#### 2. Dependencies installieren
-
-```bash
-# Installiert alle Dependencies für Backend und Frontend
 npm install
 ```
 
-#### 3. Umgebungsvariablen konfigurieren
+#### 2. Umgebungsvariablen konfigurieren
 
-Die Anwendung benötigt eine `.env`-Datei im `apps/backend`-Ordner mit Konfigurationsvariablen.
+```bash
+# Windows (CMD)
+copy apps\backend\.env.example apps\backend\.env
 
-**Schritt-für-Schritt Anleitung:**
-
-1. **In den Backend-Ordner navigieren:**
-   ```bash
-   cd apps/backend
-   ```
-
-2. **`.env`-Datei aus der Vorlage erstellen:**
-
-   **Windows (Command Prompt):**
-   ```cmd
-   copy .env.example .env
-   ```
-
-   **Windows (PowerShell):**
-   ```powershell
-   Copy-Item .env.example .env
-   ```
-
-   **Mac/Linux:**
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Konfiguration prüfen (optional):**
-
-   Die `.env`-Datei ist bereits mit Standardwerten für die lokale MongoDB konfiguriert:
-
-   ```env
-   # Server-Port (Standard: 5000)
-   PORT=5000
-
-   # MongoDB Verbindung - LOKAL (Standard)
-   MONGO_URI=mongodb://localhost:27017/notizen-api
-
-   # JWT Secret für Token-Verschlüsselung
-   JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
-
-   # Umgebung (development | production)
-   NODE_ENV=development
-   ```
-
-   > 💡 **Hinweis:** Für die lokale Entwicklung musst du normalerweise nichts ändern.
-
-4. **Zurück zum Projekt-Root:**
-   ```bash
-   cd ../..
-   ```
-
-**Troubleshooting:**
-- Falls die `.env`-Datei nicht gefunden wird: Stelle sicher, dass du dich im `apps/backend`-Ordner befindest
-- Falls MongoDB nicht verbindet: Prüfe, ob MongoDB läuft (`net start MongoDB` unter Windows)
-
-<details>
-<summary>🌐 Alternative: MongoDB Atlas (Cloud) - Nur wenn lokale Installation nicht möglich</summary>
-
-Falls du MongoDB nicht lokal installieren kannst, kannst du MongoDB Atlas nutzen:
-
-1. Kostenloses Konto bei [MongoDB Atlas](https://www.mongodb.com/atlas) erstellen
-2. M0-Cluster (Sandbox) erstellen
-3. Database User + IP-Whitelist (0.0.0.0/0) konfigurieren
-4. Connection String kopieren und in `.env` einfügen:
-
-```env
-MONGO_URI=mongodb+srv://username:password@cluster.xxxxx.mongodb.net/notizen-api?retryWrites=true&w=majority
+# Windows (PowerShell) / Mac / Linux
+cp apps/backend/.env.example apps/backend/.env
 ```
 
-> ⚠️ Ersetze `username`, `password` und `cluster` durch deine Atlas-Zugangsdaten.
+Die `.env`-Datei ist bereits für lokale MongoDB vorkonfiguriert:
 
-</details>
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/notizen-api
+JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
+NODE_ENV=development
+```
 
-#### 4. Datenbank mit Testdaten füllen (optional)
+#### 3. Testdaten einfügen (optional)
 
 ```bash
 npm run seed
 ```
 
-Dieser Befehl erstellt:
-- 👤 **Admin-Benutzer**: `admin@example.com` / `AdminPassword123!`
-- 👤 **Normaler Benutzer**: `user@example.com` / `UserPassword123!`
-- 📝 Beispielnotizen für den normalen Benutzer
+Erstellt folgende Testkonten:
+| Rolle | E-Mail | Passwort |
+|---|---|---|
+| 👑 Admin | `admin@example.com` | `AdminPassword123!` |
+| 👤 Benutzer | `user@example.com` | `UserPassword123!` |
 
-#### 5. Anwendung starten
+#### 4. Anwendung starten
 
 ```bash
-# Backend und Frontend gleichzeitig starten
+# Backend UND Frontend gleichzeitig starten
 npm run dev
 ```
 
-**URLs:**
-- Backend: http://localhost:5000
-- Frontend: http://localhost:5173
+| Service | URL |
+|---|---|
+| 🖥️ Backend | http://localhost:5000 |
+| 🎨 Frontend | http://localhost:5173 |
 
 ---
 
-## 🧪 Testing
+## 🔀 Einzeln starten
 
-Das Projekt enthält umfassende Tests mit Jest:
+### Nur Backend
 
 ```bash
-# Alle Tests ausführen
-npm run test
-
-# Tests im Watch-Modus (bei Dateiänderungen neu ausführen)
-npm run test:watch
-
-# Tests mit Coverage-Report
-npm run test:coverage
+npm run dev -w backend
+# oder direkt:
+cd apps/backend && npm run dev
 ```
 
-**Test-Struktur:**
-```
-apps/backend/src/__tests__/
-├── setup.ts                      # Test-Konfiguration
-├── unit/
-│   ├── authService.test.ts      # AuthService Unit-Tests
-│   └── noteService.test.ts      # NoteService Unit-Tests
-└── integration/
-    └── authRoutes.test.ts       # API Integrationstests
-```
-
----
-
-## 🎨 Code-Qualität
-
-### Linting und Formatierung
+### Nur Frontend
 
 ```bash
-# ESLint ausführen
-npm run lint
-
-# ESLint mit automatischer Fehlerbehebung
-npm run lint:fix
-
-# Prettier Formatierung anwenden
-npm run format
+npm run dev -w frontend
+# oder direkt:
+cd apps/frontend && npm run dev
 ```
 
----
+### Hybrid: Nur DB per Docker, Code lokal
 
-## 🏗️ Projektstruktur
+```bash
+# Nur MongoDB als Container starten
+docker-compose up -d mongodb
 
+# Backend & Frontend lokal starten (mit Hot-Reload)
+npm run dev
 ```
-📦 Neue-Datenbankkonzepte_Notizen-API
-├── 📁 apps/
-│   ├── 📁 backend/                 # Express.js API
-│   │   ├── 📁 src/
-│   │   │   ├── 📁 __tests__/      # Jest Tests
-│   │   │   │   ├── 📁 integration/# Integrationstests
-│   │   │   │   └── 📁 unit/       # Unit-Tests
-│   │   │   ├── 📁 config/         # Datenbank-Konfiguration
-│   │   │   ├── 📁 controllers/    # HTTP-Request-Handler
-│   │   │   ├── 📁 middleware/     # Auth & Role Middleware
-│   │   │   ├── 📁 models/         # Mongoose-Modelle
-│   │   │   ├── 📁 routes/         # API-Routen
-│   │   │   ├── 📁 services/       # Geschäftslogik
-│   │   │   ├── 📁 types/          # TypeScript-Typen
-│   │   │   ├── index.ts           # Einstiegspunkt
-│   │   │   └── seed.ts            # Testdaten
-│   │   ├── 📄 Dockerfile
-│   │   ├── 📄 eslint.config.mjs
-│   │   ├── 📄 jest.config.js
-│   │   ├── 📄 package.json
-│   │   └── 📄 tsconfig.json
-│   └── 📁 frontend/               # Vite + TypeScript Client
-│       ├── 📁 src/
-│       │   ├── api.ts
-│       │   ├── main.ts
-│       │   └── styles.css
-│       ├── 📄 Dockerfile
-│       ├── 📄 eslint.config.js
-│       ├── 📄 package.json
-│       └── 📄 tsconfig.json
-├── 📁 documents/                  # Dokumentation
-├── 📁 .vscode/                    # VSCode Einstellungen
-├──  .dockerignore
-├── 📄 .prettierrc                 # Prettier-Konfiguration
-├── 📄 docker-compose.yml          # Docker Compose Konfiguration
-├── 📄 package.json                # Root Package (Workspaces)
-└── 📄 README.md
-```
+
+> 💡 Ideal für die Entwicklung — Hot-Reload funktioniert lokal schneller als im Container.
 
 ---
 
@@ -299,46 +169,81 @@ npm run format
 ### Root-Level
 
 | Script | Beschreibung |
-|--------|-------------|
-| `npm run dev` | Startet Backend und Frontend parallel |
-| `npm run test` | Führt alle Tests aus |
+|---|---|
+| `npm run dev` | Backend + Frontend parallel starten |
+| `npm run build` | Backend + Frontend bauen |
+| `npm run seed` | Datenbank mit Testdaten füllen |
+| `npm run test` | Alle Tests ausführen |
 | `npm run test:watch` | Tests im Watch-Modus |
 | `npm run test:coverage` | Tests mit Coverage-Report |
-| `npm run lint` | Linting für beide Projekte |
-| `npm run lint:fix` | Linting mit automatischer Fehlerbehebung |
+| `npm run lint` | ESLint für beide Projekte |
+| `npm run lint:fix` | ESLint mit automatischer Fehlerbehebung |
 | `npm run format` | Prettier Formatierung |
-| `npm run seed` | Datenbank mit Testdaten füllen |
 | `npm run docker:up` | Docker Compose starten |
 | `npm run docker:down` | Docker Compose stoppen |
 
 ### Backend-Spezifisch
 
 | Script | Beschreibung |
-|--------|-------------|
-| `npm run dev -w backend` | Backend im Dev-Modus |
+|---|---|
+| `npm run dev -w backend` | Dev-Server mit Hot-Reload |
 | `npm run build -w backend` | TypeScript kompilieren |
 | `npm run start -w backend` | Kompilierte App starten |
 | `npm run test -w backend` | Tests ausführen |
-| `npm run lint -w backend` | ESLint ausführen |
-| `npm run format -w backend` | Prettier Formatierung |
 
 ### Frontend-Spezifisch
 
 | Script | Beschreibung |
-|--------|-------------|
-| `npm run dev -w frontend` | Vite Dev-Server |
+|---|---|
+| `npm run dev -w frontend` | Vite Dev-Server (mit `--force`) |
 | `npm run build -w frontend` | Produktions-Build |
-| `npm run preview -w frontend` | Build preview |
-| `npm run lint -w frontend` | ESLint + TypeScript Check |
-| `npm run format -w frontend` | Prettier Formatierung |
+| `npm run preview -w frontend` | Build-Vorschau |
+
+---
+
+## 📚 API-Endpunkte
+
+### Authentifizierung
+
+| Methode | Endpunkt | Beschreibung | Auth |
+|---|---|---|---|
+| `POST` | `/api/auth/register` | Benutzer registrieren | ❌ |
+| `POST` | `/api/auth/login` | Benutzer anmelden | ❌ |
+
+### Notizen
+
+| Methode | Endpunkt | Beschreibung | Auth |
+|---|---|---|---|
+| `GET` | `/api/notes` | Alle eigenen Notizen abrufen | ✅ |
+| `POST` | `/api/notes` | Neue Notiz erstellen | ✅ |
+| `GET` | `/api/notes/:id` | Einzelne Notiz abrufen | ✅ |
+| `PUT` | `/api/notes/:id` | Notiz aktualisieren | ✅ |
+| `DELETE` | `/api/notes/:id` | Notiz löschen | ✅ |
+
+**Query-Parameter für `GET /api/notes`:**
+
+| Parameter | Typ | Beschreibung |
+|---|---|---|
+| `tag` | string | Nach Tag filtern |
+| `priority` | `low` \| `medium` \| `high` | Nach Priorität filtern |
+| `search` | string | Volltextsuche in Titel & Inhalt |
+| `sort` | `asc` \| `desc` | Sortierrichtung (Standard: `desc`) |
+
+### Admin *(Admin-Rolle erforderlich)*
+
+| Methode | Endpunkt | Beschreibung |
+|---|---|---|
+| `GET` | `/api/admin/stats` | Systemstatistiken (Benutzer- & Notizanzahl) |
+| `GET` | `/api/admin/users` | Alle Benutzer auflisten |
+| `GET` | `/api/admin/users/:id/notes-count` | Notizanzahl eines Benutzers |
+| `DELETE` | `/api/admin/users/:id` | Benutzer inkl. aller Notizen löschen |
+| `GET` | `/api/admin/notes` | Alle Notizen systemweit auflisten |
 
 ---
 
 ## 🔐 Authentifizierung
 
-Die API verwendet JWT (JSON Web Tokens) für die Authentifizierung.
-
-### Token erhalten
+Die API verwendet **JWT Bearer Tokens**.
 
 **Login:**
 ```http
@@ -364,10 +269,7 @@ Content-Type: application/json
 }
 ```
 
-### Geschützte Endpunkte
-
-Füge den Token im Authorization-Header hinzu:
-
+**Geschützte Endpunkte:**
 ```http
 GET /api/notes
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -375,38 +277,42 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ---
 
-## 📚 API-Endpunkte
+## 🏗️ Projektstruktur
 
-### Authentifizierung
-
-| Methode | Endpunkt | Beschreibung |
-|---------|----------|--------------|
-| POST | `/api/auth/register` | Benutzer registrieren |
-| POST | `/api/auth/login` | Benutzer anmelden |
-
-### Notizen (Authentifizierung erforderlich)
-
-| Methode | Endpunkt | Beschreibung |
-|---------|----------|--------------|
-| GET | `/api/notes` | Alle Notizen abrufen |
-| POST | `/api/notes` | Neue Notiz erstellen |
-| GET | `/api/notes/:id` | Einzelne Notiz abrufen |
-| PUT | `/api/notes/:id` | Notiz aktualisieren |
-| DELETE | `/api/notes/:id` | Notiz löschen |
-
-### Admin (Admin-Rolle erforderlich)
-
-| Methode | Endpunkt | Beschreibung |
-|---------|----------|--------------|
-| GET | `/api/admin/users` | Alle Benutzer auflisten |
-| DELETE | `/api/admin/users/:id` | Benutzer inkl. aller Notizen löschen |
-| GET | `/api/admin/notes` | Alle Notizen systemweit auflisten |
+```
+📦 Neue-Datenbankkonzepte_Notizen-API
+├── 📁 apps/
+│   ├── 📁 backend/                 # Express.js API
+│   │   ├── 📁 src/
+│   │   │   ├── 📁 config/          # Datenbank-Konfiguration
+│   │   │   ├── 📁 controllers/     # HTTP-Request-Handler
+│   │   │   ├── 📁 middleware/      # Auth & Rollen-Middleware
+│   │   │   ├── 📁 models/          # Mongoose-Modelle (User, Note)
+│   │   │   ├── 📁 routes/          # API-Routen
+│   │   │   ├── 📁 services/        # Geschäftslogik
+│   │   │   ├── 📁 types/           # TypeScript-Typen
+│   │   │   ├── index.ts            # Einstiegspunkt
+│   │   │   └── seed.ts             # Testdaten-Skript
+│   │   ├── 📄 Dockerfile
+│   │   ├── 📄 package.json
+│   │   └── 📄 tsconfig.json
+│   └── 📁 frontend/                # Vite + TypeScript Client
+│       ├── 📁 src/
+│       │   ├── api.ts              # API-Kommunikation
+│       │   ├── main.ts             # App-Logik & UI
+│       │   └── styles.css          # Styling
+│       ├── 📄 index.html           # Einstiegspunkt
+│       ├── 📄 Dockerfile
+│       └── 📄 package.json
+├── 📁 documents/                   # Projektdokumentation
+├── 📄 docker-compose.yml           # Docker Compose Konfiguration
+├── 📄 package.json                 # Root Package (Workspaces)
+└── 📄 README.md
+```
 
 ---
 
 ## 🐳 Docker-Entwicklung
-
-### Container bauen und starten
 
 ```bash
 # Alle Services bauen und starten
@@ -415,21 +321,33 @@ docker-compose up --build
 # Im Hintergrund starten
 docker-compose up -d
 
-# Logs anzeigen
+# Logs eines Services anzeigen
 docker-compose logs -f backend
+docker-compose logs -f frontend
 
-# Einen bestimmten Service neu starten
+# Einen Service neu starten
 docker-compose restart backend
-```
 
-### Container stoppen
-
-```bash
-# Container stoppen und entfernen
+# Stoppen und Container entfernen
 docker-compose down
 
-# Inklusive Volumes löschen
+# Stoppen inkl. Volumes (Datenbank wird geleert)
 docker-compose down -v
+```
+
+---
+
+## 🎨 Code-Qualität
+
+```bash
+# ESLint ausführen
+npm run lint
+
+# ESLint mit automatischer Fehlerbehebung
+npm run lint:fix
+
+# Prettier Formatierung anwenden
+npm run format
 ```
 
 ---
@@ -442,6 +360,6 @@ ISC
 
 ## 👨‍💻 Autor
 
-Entwickelt im Rahmen des Moduls "Neue Datenbankkonzepte" an der DHBW Heidenheim.
+Entwickelt im Rahmen des Moduls **"Neue Datenbankkonzepte"** an der **DHBW Heidenheim**.
 
-Bei Fragen oder Problemen erstelle gerne ein [GitHub Issue](https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API/issues).
+Bei Fragen oder Problemen: [GitHub Issues](https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API/issues)
