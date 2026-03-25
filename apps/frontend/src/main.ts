@@ -789,7 +789,7 @@ const renderAdminNotes = (notes: (Note & { user?: User })[]) => {
             <td>${escapeHtml(note.user?.email || 'Unbekannt')}</td>
             <td>${escapeHtml(note.priority || '')}</td>
             <td>${new Date(note.createdAt).toLocaleDateString('de-DE')}</td>
-            <td>${note.tags?.join(', ') || ''}</td>
+            <td>${note.tags?.map((tag) => escapeHtml(tag)).join(', ') || ''}</td>
         `;
     });
 };

@@ -11,32 +11,46 @@ export const createNote = async (req: Request, res: Response): Promise<void> => 
         return;
     }
 
-    // Notiz mit Benutzer-ID verknüpfen – Datenisolation sichergestellt (FA-08, US-03)
-    const note = await noteService.createNote(req.user!._id, {
-        title,
-        content,
-        tags,
-        priority,
-        reminderDate,
-        customFields,
-        checklist,
-    });
+    try {
+        // Notiz mit Benutzer-ID verknüpfen – Datenisolation sichergestellt (FA-08, US-03)
+        const note = await noteService.createNote(req.user!._id, {
+            title,
+            content,
+            tags,
+            priority,
+            reminderDate,
+            customFields,
+            checklist,
+        });
 
-    res.status(201).json({ success: true, data: note });
+        res.status(201).json({ success: true, data: note });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Erstellen der Notiz.',
+        });
+    }
 };
 
 // Gibt alle Notizen des Benutzers mit Filter, Suche und Sortierung zurück (FA-01–FA-04, FA-08)
 export const getNotes = async (req: Request, res: Response): Promise<void> => {
     const { tag, priority, search, sort } = req.query;
 
-    const notes = await noteService.getNotes(req.user!._id, {
-        tag: typeof tag === 'string' ? tag : undefined,
-        priority: typeof priority === 'string' ? priority : undefined,
-        search: typeof search === 'string' ? search : undefined,
-        sort: sort === 'asc' ? 'asc' : 'desc',
-    });
+    try {
+        const notes = await noteService.getNotes(req.user!._id, {
+            tag: typeof tag === 'string' ? tag : undefined,
+            priority: typeof priority === 'string' ? priority : undefined,
+            search: typeof search === 'string' ? search : undefined,
+            sort: sort === 'asc' ? 'asc' : 'desc',
+        });
 
-    res.status(200).json({ success: true, count: notes.length, data: notes });
+        res.status(200).json({ success: true, count: notes.length, data: notes });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Laden der Notizen.',
+        });
+    }
 };
 
 // Gibt eine einzelne Notiz zurück – nur wenn sie dem Benutzer gehört (US-04, FA-08)
@@ -48,15 +62,22 @@ export const getNoteById = async (req: Request, res: Response): Promise<void> =>
         return;
     }
 
-    const note = await noteService.getNoteById(id, req.user!._id);
+    try {
+        const note = await noteService.getNoteById(id, req.user!._id);
 
-    // Notiz nicht gefunden oder gehört einem anderen Benutzer (US-04, FA-08)
-    if (!note) {
-        res.status(404).json({ success: false, message: 'Notiz nicht gefunden.' });
-        return;
+        // Notiz nicht gefunden oder gehört einem anderen Benutzer (US-04, FA-08)
+        if (!note) {
+            res.status(404).json({ success: false, message: 'Notiz nicht gefunden.' });
+            return;
+        }
+
+        res.status(200).json({ success: true, data: note });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Laden der Notiz.',
+        });
     }
-
-    res.status(200).json({ success: true, data: note });
 };
 
 // Aktualisiert eine Notiz, nur wenn sie dem Benutzer gehört (US-06, US-11, FA-08)
@@ -106,13 +127,20 @@ export const deleteNote = async (req: Request, res: Response): Promise<void> => 
         return;
     }
 
-    const deleted = await noteService.deleteNote(id, req.user!._id);
+    try {
+        const deleted = await noteService.deleteNote(id, req.user!._id);
 
-    // Notiz nicht gefunden oder gehört anderem Benutzer (FA-08, US-07)
-    if (!deleted) {
-        res.status(404).json({ success: false, message: 'Notiz nicht gefunden.' });
-        return;
+        // Notiz nicht gefunden oder gehört anderem Benutzer (FA-08, US-07)
+        if (!deleted) {
+            res.status(404).json({ success: false, message: 'Notiz nicht gefunden.' });
+            return;
+        }
+
+        res.status(200).json({ success: true, message: 'Notiz erfolgreich gelöscht.' });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Löschen der Notiz.',
+        });
     }
-
-    res.status(200).json({ success: true, message: 'Notiz erfolgreich gelöscht.' });
 };

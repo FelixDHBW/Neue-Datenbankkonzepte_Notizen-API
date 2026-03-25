@@ -4,7 +4,7 @@ import Note from '../models/Note.js';
 
 // Interface für Benutzer-Informationen (ohne Passwort)
 export interface IUserInfo {
-    id: string;
+    _id: string;
     email: string;
     role: UserRole;
     createdAt: Date;
@@ -43,7 +43,7 @@ export class AdminService {
         const users = await User.find().select('_id email role createdAt');
 
         return users.map((user) => ({
-            id: user._id.toString(),
+            _id: user._id.toString(),
             email: user.email,
             role: user.role,
             createdAt: user.createdAt,
@@ -79,7 +79,7 @@ export class AdminService {
         }
 
         const userInfo: IUserInfo = {
-            id: user._id.toString(),
+            _id: user._id.toString(),
             email: user.email,
             role: user.role,
             createdAt: user.createdAt,
