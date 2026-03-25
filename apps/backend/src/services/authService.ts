@@ -1,14 +1,8 @@
 import jwt from 'jsonwebtoken';
-import User, { IUser, UserRole } from '../models/User';
+import User, { IUser, UserRole } from '../models/User.js';
 
-// Interface für Registrierungsdaten
-export interface IRegisterData {
-    email: string;
-    password: string;
-}
-
-// Interface für Anmeldedaten
-export interface ILoginData {
+// Interface für Authentifizierungsdaten (Login & Registrierung)
+export interface IAuthData {
     email: string;
     password: string;
 }
@@ -45,7 +39,7 @@ export class AuthService {
     /**
      * Registriert einen neuen Benutzer
      */
-    async register(data: IRegisterData): Promise<IRegisterResult> {
+    async register(data: IAuthData): Promise<IRegisterResult> {
         const { email, password } = data;
 
         // E-Mail-Einzigartigkeit prüfen
@@ -75,7 +69,7 @@ export class AuthService {
     /**
      * Meldet einen Benutzer an und gibt einen JWT zurück
      */
-    async login(data: ILoginData): Promise<ILoginResult> {
+    async login(data: IAuthData): Promise<ILoginResult> {
         const { email, password } = data;
 
         // Benutzer suchen, Passwort-Hash explizit einschließen
@@ -89,17 +83,21 @@ export class AuthService {
             };
         }
 
+        // Gesperrtes Konto abweisen (US-14)
+        if (!user.isActive) {
+            return {
+                success: false,
+                message: 'Ihr Konto wurde gesperrt. Bitte wenden Sie sich an einen Administrator.',
+            };
+        }
+
         // JWT erstellen
         const jwtSecret = process.env.JWT_SECRET;
         if (!jwtSecret) {
             throw new Error('Serverkonfigurationsfehler: JWT_SECRET nicht gesetzt.');
         }
 
-        const token = jwt.sign(
-            { id: user._id, role: user.role },
-            jwtSecret,
-            { expiresIn: '8h' }
-        );
+        const token = jwt.sign({ id: user._id, role: user.role }, jwtSecret, { expiresIn: '8h' });
 
         return {
             success: true,
@@ -111,14 +109,6 @@ export class AuthService {
                 role: user.role,
             },
         };
-    }
-
-    /**
-     * Prüft, ob ein Benutzer mit der gegebenen E-Mail existiert
-     */
-    async userExists(email: string): Promise<boolean> {
-        const user = await User.findOne({ email });
-        return !!user;
     }
 
     /**

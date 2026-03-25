@@ -1,58 +1,143 @@
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
-import User from '../models/User';
-import Note from '../models/Note';
+import { adminService } from '../services/index.js';
 
- //Liste aller registrierten Benutzer (US-13)
+// Benutzer sperren (isActive = false) (US-14)
+export const banUser = async (req: Request, res: Response): Promise<void> => {
+    const id = String(req.params['id'] ?? '');
 
-export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
-    // Alle Benutzer abrufen ohne Passwort-Hash (US-13)
-    const users = await User.find().select('_id email role createdAt');
-    res.status(200).json({ success: true, count: users.length, data: users });
+    try {
+        const result = await adminService.banUser(id, req.user!._id.toString());
+
+        if (!result.success) {
+            const status = result.message === 'Benutzer nicht gefunden.' ? 404 : 400;
+            res.status(status).json({ success: false, message: result.message });
+            return;
+        }
+
+        res.status(200).json({ success: true, message: result.message, data: result.user });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Sperren des Benutzers.',
+        });
+    }
 };
 
-//Benutzer löschen inkl. aller zugehörigen Notizen (US-14, Rollenmodell)
+// Benutzer entsperren (isActive = true) (US-14)
+export const unbanUser = async (req: Request, res: Response): Promise<void> => {
+    const id = String(req.params['id'] ?? '');
 
+    try {
+        const result = await adminService.unbanUser(id);
+
+        if (!result.success) {
+            const status = result.message === 'Benutzer nicht gefunden.' ? 404 : 400;
+            res.status(status).json({ success: false, message: result.message });
+            return;
+        }
+
+        res.status(200).json({ success: true, message: result.message, data: result.user });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Entsperren des Benutzers.',
+        });
+    }
+};
+
+// Liste aller registrierten Benutzer (US-13)
+export const getAllUsers = async (_req: Request, res: Response): Promise<void> => {
+    try {
+        const users = await adminService.getAllUsers();
+        res.status(200).json({ success: true, count: users.length, data: users });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Laden der Benutzer.',
+        });
+    }
+};
+
+// Benutzer löschen inkl. aller zugehörigen Notizen (US-14, Rollenmodell)
 export const manageUserStatus = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
+    const id = String(req.params['id'] ?? '');
 
-    // ID-Format validieren
-    if (typeof id !== 'string' || !mongoose.Types.ObjectId.isValid(id)) {
-        res.status(400).json({ success: false, message: 'Ungültige Benutzer-ID.' });
-        return;
+    try {
+        const result = await adminService.deleteUser(id, req.user!._id.toString());
+
+        if (!result.success) {
+            // Unterscheide zwischen ungültiger ID (400), nicht gefunden (404) und Selbstlöschung (400)
+            const status = result.message === 'Benutzer nicht gefunden.' ? 404 : 400;
+            res.status(status).json({ success: false, message: result.message });
+            return;
+        }
+
+        res.status(200).json({
+            success: true,
+            message: result.message,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Löschen des Benutzers.',
+        });
     }
-
-    const user = await User.findById(id);
-    if (!user) {
-        res.status(404).json({ success: false, message: 'Benutzer nicht gefunden.' });
-        return;
-    }
-
-    // Admin darf sich nicht selbst löschen
-    if (user._id.toString() === req.user!._id.toString()) {
-        res.status(400).json({ success: false, message: 'Eigenes Konto kann nicht gelöscht werden.' });
-        return;
-    }
-
-    // Alle Notizen des Benutzers löschen (US-14)
-    await Note.deleteMany({ user: user._id });
-
-    // Benutzer löschen (US-14)
-    await user.deleteOne();
-
-    res.status(200).json({
-        success: true,
-        message: `Benutzer ${user.email} und alle zugehörigen Notizen wurden gelöscht.`,
-    });
 };
 
 // Alle Notizen systemweit inkl. Benutzerinformation (US-15)
-
 export const getAllNotesAdmin = async (_req: Request, res: Response): Promise<void> => {
-    // Systemweite Notizen aller Benutzer mit populated user-Feld (US-15)
-    const notes = await Note.find()
-        .select('_id title tags priority createdAt updatedAt user')
-        .populate('user', 'email role'); // Benutzerinformation anreichern (US-15)
+    try {
+        const notes = await adminService.getAllNotes();
+        res.status(200).json({ success: true, count: notes.length, data: notes });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Laden der Notizen.',
+        });
+    }
+};
 
-    res.status(200).json({ success: true, count: notes.length, data: notes });
+// Systemweite Statistiken: Anzahl Benutzer und Notizen
+export const getStats = async (_req: Request, res: Response): Promise<void> => {
+    try {
+        const [userCount, noteCount] = await Promise.all([
+            adminService.getUserCount(),
+            adminService.getNoteCount(),
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                userCount,
+                noteCount,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Laden der Statistiken.',
+        });
+    }
+};
+
+// Anzahl der Notizen eines bestimmten Benutzers
+export const getNoteCountByUser = async (req: Request, res: Response): Promise<void> => {
+    const id = String(req.params['id'] ?? '');
+
+    try {
+        const count = await adminService.getNoteCountByUser(id);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                userId: id,
+                noteCount: count,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error instanceof Error ? error.message : 'Fehler beim Laden der Notizanzahl.',
+        });
+    }
 };

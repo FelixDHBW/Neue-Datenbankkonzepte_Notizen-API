@@ -1,5 +1,5 @@
 import mongoose, { Types } from 'mongoose';
-import Note, { INote, NotePriority } from '../models/Note';
+import Note, { INote, NotePriority } from '../models/Note.js';
 
 // Interface für Filter-Optionen beim Abrufen von Notizen
 export interface INoteFilterOptions {

@@ -1,22 +1,27 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import bcrypt from 'bcryptjs';
-import User, { UserRole } from './models/User';
-import Note, { NotePriority } from './models/Note';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import User, { UserRole } from './models/User.js';
+import Note, { NotePriority } from './models/Note.js';
 
-// Konfiguration laden, damit prozess.env.MONGO_URI zur Verfügung steht
-dotenv.config();
+// __dirname in ES Modulen
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// .env relativ zur Quelldatei laden – unabhängig vom Arbeitsverzeichnis
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const seedDB = async () => {
     try {
         console.log('Starte Datenbank-Seeding...');
 
-        // Verbindung herstellen
         const mongoUri = process.env.MONGO_URI;
         if (!mongoUri) {
             console.error('Fehler: MONGO_URI in .env nicht gefunden.');
             process.exit(1);
         }
+
         await mongoose.connect(mongoUri);
         console.log(`Datenbank verbunden: ${mongoose.connection.host}`);
 
@@ -27,7 +32,7 @@ const seedDB = async () => {
         console.log('Datenbereinigung abgeschlossen.');
 
         // Admin-Benutzer erstellen
-        const adminUser = await User.create({
+        await User.create({
             email: 'admin@example.com',
             password: 'AdminPassword123!',
             role: UserRole.ADMINISTRATOR,
@@ -42,7 +47,7 @@ const seedDB = async () => {
         });
         console.log('Regulärer Benutzer erfolgreich erstellt.');
 
-        //Notiz-Seeding für den regulären User erstellen
+        // Notiz-Seeding für den regulären User
         const notesToSeed = [
             {
                 user: regularUser._id,
@@ -58,8 +63,8 @@ const seedDB = async () => {
                 customFields: new Map<string, unknown>([
                     ['budget', '150 EUR'],
                     ['store', 'Rewe & Getränkemarkt'],
-                    ['guestsInfo', { expected: 15, confirmed: 12 }]
-                ])
+                    ['guestsInfo', { expected: 15, confirmed: 12 }],
+                ]),
             },
             {
                 user: regularUser._id,
@@ -82,22 +87,27 @@ const seedDB = async () => {
                 customFields: new Map<string, unknown>([
                     ['druckerModell', 'Prusa i3 MK3S+'],
                     ['kostenSchätzung', 800],
-                    ['links', ['https://prusa3d.com', 'https://thingiverse.com']]
-                ])
-            }
+                    ['links', ['https://prusa3d.com', 'https://thingiverse.com']],
+                ]),
+            },
         ];
 
         await Note.insertMany(notesToSeed);
-        console.log(`${notesToSeed.length} Notizen für den regulären Benutzer erfolgreich erstellt.`);
+        console.log(
+            `${notesToSeed.length} Notizen für den regulären Benutzer erfolgreich erstellt.`
+        );
 
         console.log('Seeding erfolgreich abgeschlossen!');
+        console.log('');
+        console.log('Anmeldedaten:');
+        console.log('  Admin:    admin@example.com  /  AdminPassword123!');
+        console.log('  Benutzer: user@example.com   /  UserPassword123!');
         process.exit(0);
-
     } catch (error) {
         if (error instanceof Error) {
             console.error(`Fehler beim Seeding: ${error.message}`);
         } else {
-            console.error(` Unerwarteter Fehler beim Seeding:`, error);
+            console.error('Unerwarteter Fehler beim Seeding:', error);
         }
         process.exit(1);
     }

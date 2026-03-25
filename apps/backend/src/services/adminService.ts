@@ -1,13 +1,21 @@
 import mongoose from 'mongoose';
-import User, { IUser, UserRole } from '../models/User';
-import Note, { INote } from '../models/Note';
+import User, { UserRole } from '../models/User.js';
+import Note from '../models/Note.js';
 
 // Interface für Benutzer-Informationen (ohne Passwort)
 export interface IUserInfo {
-    id: string;
+    _id: string;
     email: string;
     role: UserRole;
+    isActive: boolean;
     createdAt: Date;
+}
+
+// Interface für das Ban/Unban-Ergebnis
+export interface IBanUserResult {
+    success: boolean;
+    message: string;
+    user?: IUserInfo;
 }
 
 // Interface für Notiz-Informationen mit Benutzer-Details
@@ -40,12 +48,13 @@ export class AdminService {
      * Ruft alle registrierten Benutzer ab (ohne Passwort-Hash)
      */
     async getAllUsers(): Promise<IUserInfo[]> {
-        const users = await User.find().select('_id email role createdAt');
+        const users = await User.find().select('_id email role isActive createdAt');
 
-        return users.map(user => ({
-            id: user._id.toString(),
+        return users.map((user) => ({
+            _id: user._id.toString(),
             email: user.email,
             role: user.role,
+            isActive: user.isActive,
             createdAt: user.createdAt,
         }));
     }
@@ -79,9 +88,10 @@ export class AdminService {
         }
 
         const userInfo: IUserInfo = {
-            id: user._id.toString(),
+            _id: user._id.toString(),
             email: user.email,
             role: user.role,
+            isActive: user.isActive,
             createdAt: user.createdAt,
         };
 
@@ -99,6 +109,76 @@ export class AdminService {
     }
 
     /**
+     * Sperrt einen Benutzer (isActive = false) (US-14)
+     */
+    async banUser(userId: string, adminUserId: string): Promise<IBanUserResult> {
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return { success: false, message: 'Ungültige Benutzer-ID.' };
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return { success: false, message: 'Benutzer nicht gefunden.' };
+        }
+
+        if (user._id.toString() === adminUserId) {
+            return { success: false, message: 'Eigenes Konto kann nicht gesperrt werden.' };
+        }
+
+        if (!user.isActive) {
+            return { success: false, message: 'Benutzer ist bereits gesperrt.' };
+        }
+
+        user.isActive = false;
+        await user.save();
+
+        return {
+            success: true,
+            message: `Benutzer ${user.email} wurde gesperrt.`,
+            user: {
+                _id: user._id.toString(),
+                email: user.email,
+                role: user.role,
+                isActive: user.isActive,
+                createdAt: user.createdAt,
+            },
+        };
+    }
+
+    /**
+     * Entsperrt einen Benutzer (isActive = true) (US-14)
+     */
+    async unbanUser(userId: string): Promise<IBanUserResult> {
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+            return { success: false, message: 'Ungültige Benutzer-ID.' };
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return { success: false, message: 'Benutzer nicht gefunden.' };
+        }
+
+        if (user.isActive) {
+            return { success: false, message: 'Benutzer ist nicht gesperrt.' };
+        }
+
+        user.isActive = true;
+        await user.save();
+
+        return {
+            success: true,
+            message: `Benutzer ${user.email} wurde entsperrt.`,
+            user: {
+                _id: user._id.toString(),
+                email: user.email,
+                role: user.role,
+                isActive: user.isActive,
+                createdAt: user.createdAt,
+            },
+        };
+    }
+
+    /**
      * Ruft alle Notizen systemweit ab inklusive Benutzerinformationen
      */
     async getAllNotes(): Promise<INoteWithUserInfo[]> {
@@ -106,7 +186,7 @@ export class AdminService {
             .select('_id title tags priority createdAt updatedAt user')
             .populate('user', 'email role');
 
-        return notes.map(note => {
+        return notes.map((note) => {
             const user = note.user as unknown as { email: string; role: UserRole };
             return {
                 _id: note._id.toString(),

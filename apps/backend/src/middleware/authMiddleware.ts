@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User, { IUser } from '../models/User';
+import User, { IUser } from '../models/User.js';
 
 // Struktur des JWT-Payloads (FA-07)
 interface JwtPayload {
@@ -8,26 +8,20 @@ interface JwtPayload {
     role: string;
 }
 
-// Erweitert Express Request um req.user (FA-07)
-declare global {
-    // eslint-disable-next-line @typescript-eslint/no-namespace
-    namespace Express {
-        interface Request {
-            user?: IUser;
-        }
-    }
-}
-
 /**
  * protect prüft ob ein gültiger JWT im Authorization-Header vorhanden ist (FA-07)
  * Hängt den Benutzer bei Erfolg an req.user an.
+ * Die Typerweiterung für req.user ist in src/types/index.d.ts definiert.
  */
 export const protect = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const authHeader = req.headers.authorization;
 
     // Bearer-Token aus dem Header extrahieren
     if (!authHeader?.startsWith('Bearer ')) {
-        res.status(401).json({ success: false, message: 'Kein Zugriffstoken vorhanden. Zugriff verweigert.' });
+        res.status(401).json({
+            success: false,
+            message: 'Kein Zugriffstoken vorhanden. Zugriff verweigert.',
+        });
         return;
     }
 
@@ -47,14 +41,29 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
         // Benutzer aus der DB laden und an req hängen
         const user = await User.findById(decoded.id);
         if (!user) {
-            res.status(401).json({ success: false, message: 'Benutzer nicht gefunden. Token ungültig.' });
+            res.status(401).json({
+                success: false,
+                message: 'Benutzer nicht gefunden. Token ungültig.',
+            });
             return;
         }
 
-        req.user = user;
+        // Gesperrte Benutzer abweisen (US-14)
+        if (!user.isActive) {
+            res.status(403).json({
+                success: false,
+                message: 'Ihr Konto wurde gesperrt. Bitte wenden Sie sich an einen Administrator.',
+            });
+            return;
+        }
+
+        req.user = user as IUser;
         next();
     } catch {
         // Manipulierte oder abgelaufene Tokens abfangen (FA-07)
-        res.status(401).json({ success: false, message: 'Token ungültig oder abgelaufen. Zugriff verweigert.' });
+        res.status(401).json({
+            success: false,
+            message: 'Token ungültig oder abgelaufen. Zugriff verweigert.',
+        });
     }
 };

@@ -13,9 +13,10 @@
         <!-- Header mit Navigation -->
         <header class="header" id="header" style="display: none;">
             <div class="header-content">
-                <h1>📝 Notizen-App</h1>
+                <h1 id="btn-home" style="cursor: pointer;" title="Zurück zum Dashboard">📝 Notizen-App</h1>
                 <nav class="nav">
                     <span id="user-info" class="user-info"></span>
+                    <button id="btn-admin" class="btn btn-admin" style="display: none;">Admin</button>
                     <button id="btn-logout" class="btn btn-secondary">Abmelden</button>
                 </nav>
             </div>
@@ -173,7 +174,7 @@
             <section id="note-detail-section" class="note-detail-section" style="display: none;">
                 <div class="note-detail-container">
                     <div class="note-detail-header">
-                        <button id="btn-back" class="btn btn-secondary">← Zurück</button>
+                        <button id="btn-back" class="btn btn-secondary">Zurück</button>
                         <div class="note-actions">
                             <button id="btn-edit" class="btn btn-primary">Bearbeiten</button>
                             <button id="btn-delete" class="btn btn-danger">Löschen</button>
@@ -187,6 +188,88 @@
             </section>
 
         </main>
+
+        <!-- Admin Dashboard Bereich -->
+        <section id="admin-section" class="admin-section" style="display: none;">
+            <div class="admin-container">
+                <div class="admin-header" id="admin-header-container">
+                    <h2>⚙️ Admin-Bereich</h2>
+                    <button id="btn-admin-back" class="btn btn-secondary">Zurück zum Dashboard</button>
+                </div>
+
+                <!-- Admin Navigation -->
+                <div class="admin-nav">
+                    <button class="admin-nav-btn active" data-tab="users">👥 Benutzer</button>
+                    <button class="admin-nav-btn" data-tab="notes">📝 Alle Notizen</button>
+                    <button class="admin-nav-btn" data-tab="stats">📊 Statistiken</button>
+                </div>
+
+                <!-- Benutzer-Tab -->
+                <div id="admin-users-tab" class="admin-tab" style="display: block;">
+                    <h3>Registrierte Benutzer</h3>
+                    <div class="table-container">
+                        <table id="users-table" class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>E-Mail</th>
+                                    <th>Rolle</th>
+                                    <th>Status</th>
+                                    <th>Registriert am</th>
+                                    <th>Aktionen</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Wird dynamisch gefüllt -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Notizen-Tab -->
+                <div id="admin-notes-tab" class="admin-tab" style="display: none;">
+                    <h3>Alle Notizen systemweit</h3>
+                    <div class="table-container">
+                        <table id="notes-table" class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Titel</th>
+                                    <th>Benutzer</th>
+                                    <th>Priorität</th>
+                                    <th>Erstellt am</th>
+                                    <th>Tags</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Wird dynamisch gefüllt -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Statistiken-Tab -->
+                <div id="admin-stats-tab" class="admin-tab" style="display: none;">
+                    <h3>System-Statistiken</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-users-stat">0</div>
+                            <div class="stat-label">Registrierte Benutzer</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="total-notes-stat">0</div>
+                            <div class="stat-label">Gesamte Notizen</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="avg-notes-per-user-stat">0</div>
+                            <div class="stat-label">Ø Notizen pro Benutzer</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="recent-activity-stat">0</div>
+                            <div class="stat-label">Kürzlich aktive Notizen</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Toast-Benachrichtigungen -->
         <div id="toast-container" class="toast-container"></div>
