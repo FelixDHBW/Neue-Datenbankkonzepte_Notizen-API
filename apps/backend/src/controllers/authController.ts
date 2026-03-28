@@ -51,8 +51,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         const result = await authService.login({ email, password });
 
         if (!result.success) {
-            // Allgemeine Fehlermeldung, kein Hinweis ob E-Mail oder Passwort falsch (US-02, FA-06)
-            res.status(401).json({ success: false, message: result.message });
+            // Gesperrtes Konto → 403, ungültige Anmeldedaten → 401 (US-02, FA-06, US-14)
+            const status = result.message?.includes('gesperrt') ? 403 : 401;
+            res.status(status).json({ success: false, message: result.message });
             return;
         }
 
