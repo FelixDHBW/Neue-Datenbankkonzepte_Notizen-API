@@ -33,15 +33,15 @@ export async function fetchApi<T>(
         const data = await response.json();
 
         if (!response.ok) {
-            // Bei 401 Token automatisch entfernen (abgelaufen / ungültig)
-            if (response.status === 401) {
+            // Bei 401 (Token ungültig/abgelaufen) oder 403 (Konto gesperrt) Token entfernen
+            if (response.status === 401 || response.status === 403) {
                 removeToken();
             }
             return {
                 success: false,
                 message: data.message || `Fehler: ${response.status}`,
-                // HTTP-Statuscode im message-Präfix für zuverlässige Erkennung
-                ...(response.status === 401 && { unauthorized: true }),
+                // unauthorized=true bei 401 und 403 → löst Redirect zur Login-Seite aus
+                ...((response.status === 401 || response.status === 403) && { unauthorized: true }),
             } as ApiResponse<T>;
         }
 

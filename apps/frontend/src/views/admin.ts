@@ -3,14 +3,10 @@
 // ============================================
 
 import { getAllUsers, deleteUser, banUser, unbanUser, getAllNotesAdmin, getStats } from '../api';
+import type { AdminNote } from '../api/admin';
 import { showLoading, hideLoading, showToast } from '../utils/ui';
 import { escapeHtml, getCurrentUser } from '../utils/helpers';
-import type { User, Note } from '../types';
-
-// Typ für Admin-Notizen: user ist ein eingebettetes Objekt {email, role}, kein vollständiges User-Objekt
-interface AdminNote extends Omit<Note, 'user'> {
-    user?: { email: string; role: string };
-}
+import type { User } from '../types';
 
 // DOM-Elemente
 const adminSection = document.getElementById('admin-section') as HTMLElement;

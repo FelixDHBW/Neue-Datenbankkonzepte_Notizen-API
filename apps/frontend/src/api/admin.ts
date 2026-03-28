@@ -5,6 +5,11 @@
 import { fetchApi } from './client';
 import type { User, Note, ApiResponse } from '../types';
 
+// Typ für Admin-Notizen: user ist ein eingebettetes Objekt {email, role}, kein vollständiges User-Objekt
+export interface AdminNote extends Omit<Note, 'user'> {
+    user?: { email: string; role: string };
+}
+
 export const getAllUsers = async (): Promise<ApiResponse<User[]>> => {
     return await fetchApi<User[]>('/admin/users');
 };
@@ -31,6 +36,6 @@ export const unbanUser = async (id: string): Promise<ApiResponse<User>> => {
     });
 };
 
-export const getAllNotesAdmin = async (): Promise<ApiResponse<(Note & { user?: User })[]>> => {
-    return await fetchApi<(Note & { user?: User })[]>('/admin/notes');
+export const getAllNotesAdmin = async (): Promise<ApiResponse<AdminNote[]>> => {
+    return await fetchApi<AdminNote[]>('/admin/notes');
 };
