@@ -298,6 +298,8 @@ cd apps/frontend && npx vite --force
 | `GET` | `/api/admin/users` | Alle Benutzer auflisten |
 | `GET` | `/api/admin/users/:id/notes-count` | Notizanzahl eines Benutzers |
 | `DELETE` | `/api/admin/users/:id` | Benutzer inkl. aller Notizen löschen |
+| `PATCH` | `/api/admin/users/:id/ban` | Benutzer sperren (`isActive = false`) |
+| `PATCH` | `/api/admin/users/:id/unban` | Benutzer entsperren (`isActive = true`) |
 | `GET` | `/api/admin/notes` | Alle Notizen systemweit auflisten |
 
 ---
@@ -321,8 +323,9 @@ Content-Type: application/json
 ```json
 {
   "success": true,
+  "message": "Anmeldung erfolgreich.",
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
+  "data": {
     "id": "...",
     "email": "user@example.com",
     "role": "Benutzer"
