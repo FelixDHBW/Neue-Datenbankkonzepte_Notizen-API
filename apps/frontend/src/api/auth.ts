@@ -13,9 +13,9 @@ export const login = async (
         body: JSON.stringify(data),
     });
 
-    const token = result.token || result.data?.token;
-    if (result.success && token) {
-        setToken(token);
+    // Das Backend gibt den Token direkt als result.token zurück (FA-07)
+    if (result.success && result.token) {
+        setToken(result.token);
     }
 
     return result;

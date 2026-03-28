@@ -14,20 +14,24 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         return;
     }
 
-    const result = await authService.register({ email, password });
+    try {
+        const result = await authService.register({ email, password });
 
-    if (!result.success) {
-        // E-Mail bereits vergeben (US-01)
-        res.status(409).json({ success: false, message: result.message });
-        return;
+        if (!result.success) {
+            // E-Mail bereits vergeben (US-01)
+            res.status(409).json({ success: false, message: result.message });
+            return;
+        }
+
+        // Erfolgsantwort ohne Passwort-Hash (FA-05)
+        res.status(201).json({
+            success: true,
+            message: result.message,
+            data: result.user,
+        });
+    } catch {
+        res.status(500).json({ success: false, message: 'Fehler bei der Registrierung.' });
     }
-
-    // Erfolgsantwort ohne Passwort-Hash (FA-05)
-    res.status(201).json({
-        success: true,
-        message: result.message,
-        data: result.user,
-    });
 };
 
 // Meldet einen Benutzer an und gibt einen JWT zurück (US-02)

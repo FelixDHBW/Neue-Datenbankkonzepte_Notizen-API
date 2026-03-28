@@ -5,4 +5,4 @@
 export { getToken, setToken, removeToken } from './client';
 export { login, register } from './auth';
 export { getNotes, getNoteById, createNote, updateNote, deleteNote } from './notes';
-export { getAllUsers, deleteUser, banUser, unbanUser, getAllNotesAdmin } from './admin';
+export { getAllUsers, deleteUser, banUser, unbanUser, getAllNotesAdmin, getStats } from './admin';

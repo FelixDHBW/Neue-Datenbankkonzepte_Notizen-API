@@ -2,7 +2,7 @@
 // Admin-View: Benutzer, Notizen & Statistiken
 // ============================================
 
-import { getAllUsers, deleteUser, banUser, unbanUser, getAllNotesAdmin } from '../api';
+import { getAllUsers, deleteUser, banUser, unbanUser, getAllNotesAdmin, getStats } from '../api';
 import { showLoading, hideLoading, showToast } from '../utils/ui';
 import { escapeHtml, getCurrentUser } from '../utils/helpers';
 import type { User, Note } from '../types';
@@ -166,23 +166,23 @@ const renderAdminNotes = (notes: (Note & { user?: User })[]): void => {
     });
 };
 
-// Statistiken laden
+// Statistiken laden – nutzt den dedizierten /api/admin/stats Endpunkt
 const loadStats = async (): Promise<void> => {
     try {
         showLoading();
-        const [usersResponse, notesResponse] = await Promise.all([
-            getAllUsers(),
+        const [statsResponse, notesResponse] = await Promise.all([
+            getStats(),
             getAllNotesAdmin(),
         ]);
 
-        if (usersResponse.success && notesResponse.success) {
-            const users = usersResponse.data || [];
+        if (statsResponse.success && statsResponse.data && notesResponse.success) {
+            const { userCount, noteCount } = statsResponse.data;
             const notes = notesResponse.data || [];
 
-            totalUsersStat.textContent = users.length.toString();
-            totalNotesStat.textContent = notes.length.toString();
+            totalUsersStat.textContent = userCount.toString();
+            totalNotesStat.textContent = noteCount.toString();
             avgNotesPerUserStat.textContent =
-                users.length > 0 ? (notes.length / users.length).toFixed(1) : '0';
+                userCount > 0 ? (noteCount / userCount).toFixed(1) : '0';
 
             const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
             recentActivityStat.textContent = notes

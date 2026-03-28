@@ -90,7 +90,7 @@ export class NoteService {
         const sortOrder: 1 | -1 = sort === 'asc' ? 1 : -1;
 
         const notes = await Note.find(query)
-            .select('_id title tags priority updatedAt createdAt')
+            .select('_id title content tags priority updatedAt createdAt')
             .sort({ updatedAt: sortOrder });
 
         return notes;

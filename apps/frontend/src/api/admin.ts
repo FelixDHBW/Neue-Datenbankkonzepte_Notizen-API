@@ -9,6 +9,10 @@ export const getAllUsers = async (): Promise<ApiResponse<User[]>> => {
     return await fetchApi<User[]>('/admin/users');
 };
 
+export const getStats = async (): Promise<ApiResponse<{ userCount: number; noteCount: number }>> => {
+    return await fetchApi<{ userCount: number; noteCount: number }>('/admin/stats');
+};
+
 export const deleteUser = async (id: string): Promise<ApiResponse> => {
     return await fetchApi(`/admin/users/${id}`, {
         method: 'DELETE',
