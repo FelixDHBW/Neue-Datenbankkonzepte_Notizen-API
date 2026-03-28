@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
     getAllUsers,
-    manageUserStatus,
+    deleteUserById,
     getAllNotesAdmin,
     getStats,
     getNoteCountByUser,
@@ -26,7 +26,7 @@ router.get('/users', getAllUsers);
 router.get('/users/:id/notes-count', getNoteCountByUser);
 
 // Benutzer + Notizen löschen (US-14)
-router.delete('/users/:id', manageUserStatus);
+router.delete('/users/:id', deleteUserById);
 
 // Benutzer sperren (US-14)
 router.patch('/users/:id/ban', banUser);

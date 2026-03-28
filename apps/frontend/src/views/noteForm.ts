@@ -25,12 +25,28 @@ const checklistContainer = document.getElementById('checklist-container') as HTM
 const addCustomFieldRow = (key = '', value = ''): void => {
     const row = document.createElement('div');
     row.className = 'custom-field-row';
-    row.innerHTML = `
-        <input type="text" placeholder="Schlüssel" class="custom-key" value="${escapeHtml(key)}">
-        <input type="text" placeholder="Wert" class="custom-value" value="${escapeHtml(value)}">
-        <button type="button" class="btn-remove">Entfernen</button>
-    `;
-    row.querySelector('.btn-remove')?.addEventListener('click', () => row.remove());
+
+    const keyInput = document.createElement('input');
+    keyInput.type = 'text';
+    keyInput.placeholder = 'Schlüssel';
+    keyInput.className = 'custom-key';
+    keyInput.value = key;
+
+    const valueInput = document.createElement('input');
+    valueInput.type = 'text';
+    valueInput.placeholder = 'Wert';
+    valueInput.className = 'custom-value';
+    valueInput.value = value;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn-remove';
+    removeBtn.textContent = 'Entfernen';
+    removeBtn.addEventListener('click', () => row.remove());
+
+    row.appendChild(keyInput);
+    row.appendChild(valueInput);
+    row.appendChild(removeBtn);
     customFieldsContainer.appendChild(row);
 };
 
@@ -38,12 +54,27 @@ const addCustomFieldRow = (key = '', value = ''): void => {
 const addChecklistRow = (text = '', isCompleted = false): void => {
     const row = document.createElement('div');
     row.className = 'checklist-item-row';
-    row.innerHTML = `
-        <input type="checkbox" ${isCompleted ? 'checked' : ''} class="checklist-check">
-        <input type="text" placeholder="Aufgabe..." class="checklist-text" value="${escapeHtml(text)}">
-        <button type="button" class="btn-remove">Entfernen</button>
-    `;
-    row.querySelector('.btn-remove')?.addEventListener('click', () => row.remove());
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'checklist-check';
+    checkbox.checked = isCompleted;
+
+    const textInput = document.createElement('input');
+    textInput.type = 'text';
+    textInput.placeholder = 'Aufgabe...';
+    textInput.className = 'checklist-text';
+    textInput.value = text;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'btn-remove';
+    removeBtn.textContent = 'Entfernen';
+    removeBtn.addEventListener('click', () => row.remove());
+
+    row.appendChild(checkbox);
+    row.appendChild(textInput);
+    row.appendChild(removeBtn);
     checklistContainer.appendChild(row);
 };
 

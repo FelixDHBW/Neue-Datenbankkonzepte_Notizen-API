@@ -59,7 +59,7 @@ export const getAllUsers = async (_req: Request, res: Response): Promise<void> =
 };
 
 // Benutzer löschen inkl. aller zugehörigen Notizen (US-14, Rollenmodell)
-export const manageUserStatus = async (req: Request, res: Response): Promise<void> => {
+export const deleteUserById = async (req: Request, res: Response): Promise<void> => {
     const id = String(req.params['id'] ?? '');
 
     try {

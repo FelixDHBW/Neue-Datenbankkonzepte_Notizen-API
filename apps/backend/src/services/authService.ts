@@ -75,19 +75,28 @@ export class AuthService {
         // Benutzer suchen, Passwort-Hash explizit einschließen
         const user = await User.findOne({ email }).select('+password');
 
-        // Passwort prüfen
-        if (!user || !(await user.comparePassword(password))) {
+        // Benutzer nicht gefunden – allgemeine Fehlermeldung (kein Hinweis ob E-Mail oder Passwort falsch)
+        if (!user) {
             return {
                 success: false,
                 message: 'Ungültige Anmeldedaten.',
             };
         }
 
-        // Gesperrtes Konto abweisen (US-14)
+        // Gesperrtes Konto VOR Passwortprüfung abweisen (US-14)
+        // Verhindert Timing-Leak: bcrypt.compare dauert messbar länger als ein einfacher Boolean-Check
         if (!user.isActive) {
             return {
                 success: false,
                 message: 'Ihr Konto wurde gesperrt. Bitte wenden Sie sich an einen Administrator.',
+            };
+        }
+
+        // Passwort prüfen
+        if (!(await user.comparePassword(password))) {
+            return {
+                success: false,
+                message: 'Ungültige Anmeldedaten.',
             };
         }
 

@@ -2,7 +2,7 @@
 // Notes-View: Dashboard & Notiz-Detail
 // ============================================
 
-import { getNotes, getNoteById, deleteNote, removeToken } from '../api';
+import { getNotes, getNoteById, deleteNote } from '../api';
 import { showLoading, hideLoading, showToast } from '../utils/ui';
 import { formatDate, escapeHtml, extractUniqueTags, getCurrentUser, debounce } from '../utils/helpers';
 import { showAuthSection } from './auth';
@@ -50,12 +50,13 @@ export const showDashboard = async (): Promise<void> => {
 export const loadNotes = async (): Promise<void> => {
     showLoading();
 
-    const filters = {
-        tag: filterTag.value,
-        priority: filterPriority.value,
-        search: searchInput.value,
+    // Leere Strings nicht als Filter übergeben – Backend würde sonst nach "" filtern
+    const filters: { tag?: string; priority?: string; search?: string; sort?: 'asc' | 'desc' } = {
         sort: sortOrder.value as 'asc' | 'desc',
     };
+    if (filterTag.value) filters.tag = filterTag.value;
+    if (filterPriority.value) filters.priority = filterPriority.value;
+    if (searchInput.value) filters.search = searchInput.value;
 
     const result = await getNotes(filters);
     hideLoading();
@@ -64,8 +65,8 @@ export const loadNotes = async (): Promise<void> => {
         currentNotes = result.data;
         renderNotes();
         updateTagFilter();
-    } else if (result.message?.includes('401') || result.message?.includes('Token')) {
-        removeToken();
+    } else if (result.unauthorized) {
+        // Token abgelaufen oder ungültig – fetchApi hat Token bereits entfernt
         showAuthSection();
         showToast('Sitzung abgelaufen. Bitte melde dich erneut an.', 'error');
     } else {

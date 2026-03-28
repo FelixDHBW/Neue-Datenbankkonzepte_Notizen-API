@@ -65,4 +65,6 @@ export interface ApiResponse<T = undefined> {
     data?: T;
     message?: string;
     token?: string;
+    /** Wird von fetchApi gesetzt wenn HTTP 401 zurückkommt (Token abgelaufen/ungültig) */
+    unauthorized?: boolean;
 }

@@ -7,6 +7,11 @@ import { showLoading, hideLoading, showToast } from '../utils/ui';
 import { escapeHtml, getCurrentUser } from '../utils/helpers';
 import type { User, Note } from '../types';
 
+// Typ für Admin-Notizen: user ist ein eingebettetes Objekt {email, role}, kein vollständiges User-Objekt
+interface AdminNote extends Omit<Note, 'user'> {
+    user?: { email: string; role: string };
+}
+
 // DOM-Elemente
 const adminSection = document.getElementById('admin-section') as HTMLElement;
 const adminNavBtns = document.querySelectorAll('.admin-nav-btn');
@@ -30,7 +35,6 @@ export const showAdminSection = (): void => {
     const adminBtn = document.getElementById('btn-admin') as HTMLButtonElement | null;
     if (adminBtn) adminBtn.style.display = 'none';
 
-    adminSection.querySelectorAll('.btn-back-admin').forEach((el) => el.remove());
     showAdminUsersTab();
 };
 
@@ -92,15 +96,19 @@ const renderUsers = (users: User[]): void => {
     const tbody = usersTable.querySelector('tbody') || usersTable.createTBody();
     tbody.innerHTML = '';
 
+    // Eigene Admin-ID ermitteln, um Selbst-Aktionen im Frontend zu verhindern
+    const currentUser = getCurrentUser();
+
     users.forEach((user) => {
         const row = tbody.insertRow();
+        const isSelf = currentUser?.id === user._id;
 
         const statusBadge = user.isActive
             ? '<span style="color:#22c55e;font-weight:600;">✓ Aktiv</span>'
             : '<span style="color:#ef4444;font-weight:600;">✗ Gesperrt</span>';
 
         row.innerHTML = `
-            <td>${escapeHtml(user.email)}</td>
+            <td>${escapeHtml(user.email)}${isSelf ? ' <em style="color:#94a3b8;font-size:0.8em;">(Sie)</em>' : ''}</td>
             <td>${escapeHtml(user.role)}</td>
             <td>${statusBadge}</td>
             <td>${new Date(user.createdAt).toLocaleDateString('de-DE')}</td>
@@ -108,6 +116,16 @@ const renderUsers = (users: User[]): void => {
         `;
 
         const actionsCell = row.lastElementChild!;
+
+        // Eigenen Account nicht sperren/löschen können (Backend verhindert es ebenfalls)
+        if (isSelf) {
+            const selfNote = document.createElement('span');
+            selfNote.style.color = '#94a3b8';
+            selfNote.style.fontSize = '0.85em';
+            selfNote.textContent = '–';
+            actionsCell.appendChild(selfNote);
+            return;
+        }
 
         if (user.isActive) {
             const banBtn = document.createElement('button');
@@ -150,7 +168,7 @@ const loadAdminNotes = async (): Promise<void> => {
     }
 };
 
-const renderAdminNotes = (notes: (Note & { user?: User })[]): void => {
+const renderAdminNotes = (notes: AdminNote[]): void => {
     const tbody = notesTable.querySelector('tbody') || notesTable.createTBody();
     tbody.innerHTML = '';
 
@@ -294,6 +312,4 @@ export const initAdminEvents = (): void => {
         });
     }
 
-    // Alte gecachte Zurück-Buttons bereinigen
-    document.querySelectorAll('.btn-back-admin').forEach((el) => el.remove());
 };

@@ -33,10 +33,16 @@ export async function fetchApi<T>(
         const data = await response.json();
 
         if (!response.ok) {
+            // Bei 401 Token automatisch entfernen (abgelaufen / ungültig)
+            if (response.status === 401) {
+                removeToken();
+            }
             return {
                 success: false,
                 message: data.message || `Fehler: ${response.status}`,
-            };
+                // HTTP-Statuscode im message-Präfix für zuverlässige Erkennung
+                ...(response.status === 401 && { unauthorized: true }),
+            } as ApiResponse<T>;
         }
 
         return data;
