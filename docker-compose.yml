@@ -7,11 +7,10 @@ services:
     container_name: notizen-mongodb
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27018:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: adminpassword
-      MONGO_INITDB_DATABASE: notizen-api
     volumes:
       - mongodb_data:/data/db
     networks:

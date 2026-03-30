@@ -39,8 +39,10 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 ### Datenbank
 - **MongoDB 7** (NoSQL-Dokumentendatenbank)
 - Läuft als eigener Docker-Container (`notizen-mongodb`)
-- Verbindungs-URI: `mongodb://admin:adminpassword@localhost:27017/notizen-api?authSource=admin`
-- Zugriff mit **MongoDB Compass**: Verbindung über `mongodb://admin:adminpassword@localhost:27017/`
+- Verbindungs-URI: `mongodb://admin:adminpassword@localhost:27018/notizen-api?authSource=admin`
+- Zugriff mit **MongoDB Compass**: Verbindung über `mongodb://admin:adminpassword@localhost:27018/?authSource=admin`
+
+> **Hinweis für MongoDB Compass:** Docker Desktop muss laufen und `docker-compose up -d` muss ausgeführt worden sein, bevor eine Verbindung möglich ist. MongoDB läuft ausschließlich als Docker-Container – ohne Docker gibt es keinen Datenbankserver auf Port 27018.
 
 ---
 
@@ -88,7 +90,7 @@ Warte, bis im Terminal folgende Meldungen erscheinen:
 |---|---|
 | Frontend | [http://localhost:5173](http://localhost:5173) |
 | Backend API | [http://localhost:5000](http://localhost:5000) |
-| MongoDB | `localhost:27017` |
+| MongoDB | `localhost:27018` |
 
 ### Services stoppen
 
