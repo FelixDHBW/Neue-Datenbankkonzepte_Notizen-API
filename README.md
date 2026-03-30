@@ -40,28 +40,34 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 - **MongoDB 7** (NoSQL-Dokumentendatenbank)
 - Läuft als eigener Docker-Container (`notizen-mongodb`)
 - Verbindungs-URI: `mongodb://admin:adminpassword@localhost:27018/notizen-api?authSource=admin`
-- Zugriff mit **MongoDB Compass**: Verbindung über `mongodb://admin:adminpassword@localhost:27018/?authSource=admin`
-
-> **Hinweis für MongoDB Compass:** Docker Desktop muss laufen und `docker-compose up -d` muss ausgeführt worden sein, bevor eine Verbindung möglich ist. MongoDB läuft ausschließlich als Docker-Container – ohne Docker gibt es keinen Datenbankserver auf Port 27018.
+- Zugriff mit **MongoDB Compass**: `mongodb://admin:adminpassword@localhost:27018/?authSource=admin`
 
 ---
 
 ## Voraussetzungen
 
-**Docker Desktop**
+Folgende Programme müssen **vor dem Start** installiert sein:
+
+### 1. Docker Desktop
 1. Öffne [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
 2. Lade Docker Desktop für dein Betriebssystem herunter und installiere es
 3. Starte Docker Desktop und warte, bis das Symbol in der Taskleiste **grün** wird
 
-> **Hinweis:** Docker Desktop muss immer im Hintergrund laufen, wenn du das Projekt startest.
+> **Wichtig:** Docker Desktop muss immer im Hintergrund laufen, wenn du das Projekt startest.
 
-**Git**
+### 2. Git
 1. Öffne [https://git-scm.com/downloads](https://git-scm.com/downloads)
 2. Lade Git herunter und installiere es
 
 ---
 
 ## Installation & Start
+
+> **Übersicht der Reihenfolge:**
+> 1. Docker Desktop starten (grünes Symbol abwarten)
+> 2. Repository klonen
+> 3. Erster Start: `docker-compose up --build` (Images bauen + starten)
+> 4. Browser öffnen
 
 ### Schritt 1: Repository klonen
 
@@ -70,17 +76,19 @@ git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
 cd Neue-Datenbankkonzepte_Notizen-API
 ```
 
-### Schritt 2: Alle Services starten
+### Schritt 2: Erster Start – Images bauen und alle Services starten
 
 ```bash
 docker-compose up --build
 ```
 
-> Beim ersten Start werden die Docker-Images gebaut — das dauert 2–5 Minuten. Danach geht es schneller.
+> **Was passiert hier?**
+> - `--build` sorgt dafür, dass die Docker-Images für Backend und Frontend gebaut werden.
+> - Beim **ersten Start** ist dieser Schritt zwingend erforderlich.
+> - Das Bauen dauert beim ersten Mal **2–5 Minuten** – danach geht es schneller.
+> - Für Docker ist keine `.env`-Datei nötig – alle Werte sind in `docker-compose.yml` vorkonfiguriert.
 
-> **Hinweis:** Für Docker keine `.env` nötig – alle Werte sind in `docker-compose.yml` vorkonfiguriert.
-
-Warte, bis im Terminal folgende Meldungen erscheinen (es erscheint noch weiterer Output danach – das ist normal):
+Warte, bis im Terminal folgende Meldungen erscheinen (weiterer Output danach ist normal):
 - `Server läuft auf Port 5000`
 - `Local: http://localhost:5173`
 
@@ -92,14 +100,56 @@ Warte, bis im Terminal folgende Meldungen erscheinen (es erscheint noch weiterer
 | Backend API | [http://localhost:5000](http://localhost:5000) |
 | MongoDB | `localhost:27018` |
 
-### Services stoppen
+---
+
+## Folgestarts (ab dem 2. Mal)
+
+Wenn die Images bereits gebaut wurden, reicht beim nächsten Start:
 
 ```bash
-# Strg+C im Terminal, dann:
+# Im Vordergrund (mit Log-Ausgabe im Terminal):
+docker-compose up
+
+# Oder im Hintergrund (Terminal bleibt frei):
+docker-compose up -d
+```
+
+> **Hinweis:** `docker-compose up --build` ist nur beim ersten Start oder nach Code-Änderungen nötig. Danach genügt `docker-compose up` bzw. `docker-compose up -d`.
+
+---
+
+## Services stoppen
+
+```bash
+# Strg+C im Terminal (wenn im Vordergrund gestartet), dann:
 docker-compose down
 
 # Oder stoppen inkl. Datenbank leeren:
 docker-compose down -v
+```
+
+---
+
+## Probleme beim Start?
+
+Sollte beim Start etwas nicht funktionieren, hilft in den meisten Fällen folgendes:
+
+- **Docker Desktop läuft nicht** → Starte Docker Desktop und warte, bis das Symbol in der Taskleiste **grün** ist
+- **Port 5000 oder 5173 bereits belegt** → Beende das andere Programm oder starte Docker neu (`docker-compose down`, dann erneut starten)
+- **Docker-Fehler (`dockerDesktopLinuxEngine`)** → Docker Desktop neu starten
+- **MongoDB Compass verbindet sich nicht** → Stelle sicher, dass die Container laufen (`docker-compose up --build` beim ersten Start, `docker-compose up -d` bei Folgestarts)
+
+---
+
+## MongoDB Compass (optional)
+
+Mit [MongoDB Compass](https://www.mongodb.com/products/compass) kannst du die Datenbank grafisch einsehen.
+
+**Voraussetzung:** Die Container müssen laufen (Schritt 2 oder Folgestart muss abgeschlossen sein).
+
+**Verbindungs-URI:**
+```
+mongodb://admin:adminpassword@localhost:27018/?authSource=admin
 ```
 
 ---
@@ -114,22 +164,6 @@ Danach kannst du dich mit diesen Testkonten anmelden:
 |---|---|---|
 | Admin | `admin@example.com` | `AdminPassword123!` |
 | Benutzer | `user@example.com` | `UserPassword123!` |
-
----
-
-## Häufige Probleme
-
-### „Cannot connect to MongoDB" / Datenbankfehler
-→ Docker Desktop läuft nicht. Starte Docker Desktop, warte bis es grün ist, dann erneut versuchen.
-
-### „Port 5000 already in use"
-→ Ein anderes Programm nutzt Port 5000. Beende es oder starte Docker neu.
-
-### „Port 5173 already in use"
-→ Ein anderer Vite-Dev-Server läuft noch. Beende ihn mit `Strg+C`.
-
-### Docker-Fehler: `dockerDesktopLinuxEngine`
-→ Docker Desktop neu starten und warten bis das Symbol in der Taskleiste grün wird.
 
 ---
 
