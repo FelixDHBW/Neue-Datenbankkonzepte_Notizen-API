@@ -63,7 +63,8 @@ const seedDB = async () => {
                 customFields: new Map<string, unknown>([
                     ['budget', '150 EUR'],
                     ['store', 'Rewe & Getränkemarkt'],
-                    ['guestsInfo', { expected: 15, confirmed: 12 }],
+                    ['erwarteteGäste', 15],
+                    ['bestätigteGäste', 12],
                 ]),
             },
             {
