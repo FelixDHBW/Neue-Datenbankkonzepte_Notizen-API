@@ -36,6 +36,12 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 ### Infrastruktur
 - **Docker Compose** für containerisierte Ausführung
 
+### Datenbank
+- **MongoDB 7** (NoSQL-Dokumentendatenbank)
+- Läuft als eigener Docker-Container (`notizen-mongodb`)
+- Verbindungs-URI: `mongodb://admin:adminpassword@localhost:27017/notizen-api?authSource=admin`
+- Zugriff mit **MongoDB Compass**: Verbindung über `mongodb://admin:adminpassword@localhost:27017/`
+
 ---
 
 ## Voraussetzungen
