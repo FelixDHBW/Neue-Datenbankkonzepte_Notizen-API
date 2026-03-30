@@ -174,9 +174,9 @@ export const showNoteDetail = async (noteId: string): Promise<void> => {
 
         <div class="note-detail-meta">
             ${note.priority ? `<span class="note-card-priority ${priorityClass}">${priorityText}</span>` : ''}
-            <span class="meta-item">📅 Erstellt: ${formatDate(note.createdAt)}</span>
-            <span class="meta-item">📝 Bearbeitet: ${formatDate(note.updatedAt)}</span>
-            ${note.reminderDate ? `<span class="meta-item">⏰ Erinnerung: ${formatDate(note.reminderDate)}</span>` : ''}
+            <span class="meta-item">Erstellt: ${formatDate(note.createdAt)}</span>
+            <span class="meta-item">Bearbeitet: ${formatDate(note.updatedAt)}</span>
+            ${note.reminderDate ? `<span class="meta-item">Erinnerung: ${formatDate(note.reminderDate)}</span>` : ''}
         </div>
 
         ${
@@ -192,7 +192,7 @@ export const showNoteDetail = async (noteId: string): Promise<void> => {
         ${
             note.checklist?.length
                 ? `<div class="checklist">
-                    <h3>✓ Checkliste</h3>
+                    <h3>Checkliste</h3>
                     ${note.checklist
                         .map(
                             (item) => `
@@ -209,7 +209,7 @@ export const showNoteDetail = async (noteId: string): Promise<void> => {
         ${
             Object.keys(note.customFields || {}).length
                 ? `<div class="custom-fields">
-                    <h3>📎 Zusatzfelder</h3>
+                    <h3>Zusatzfelder</h3>
                     ${Object.entries(note.customFields)
                         .map(
                             ([key, value]) => `

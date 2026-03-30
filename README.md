@@ -1,25 +1,25 @@
-# 📝 Notizen-API
+# Notizen-API
 
 Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Frontend und MongoDB. Entwickelt im Rahmen des Moduls **"Neue Datenbankkonzepte"** an der DHBW Heidenheim.
 
 ---
 
-## ✨ Funktionen
+## Funktionen
 
 | Bereich | Funktion |
 |---|---|
-| 🔐 **Auth** | Registrierung & Login mit JWT, Passwort-Hashing (bcrypt) |
-| 📝 **Notizen** | Erstellen, Lesen, Aktualisieren, Löschen (CRUD) |
-| 🏷️ **Tags & Filter** | Tags, Prioritäten (low/medium/high), Volltextsuche, Sortierung |
-| ⏰ **Erinnerungen** | Optionales Erinnerungsdatum pro Notiz |
-| 🔧 **Zusatzfelder** | Flexible Key-Value-Paare pro Notiz |
-| ✅ **Checklisten** | Verschachtelte Aufgaben innerhalb von Notizen |
-| 👑 **Admin-Bereich** | Benutzer- & Notizenverwaltung, Systemstatistiken |
-| 🎨 **Frontend** | Responsives Web-UI mit TypeScript & Vite |
+| **Auth** | Registrierung & Login mit JWT, Passwort-Hashing (bcrypt) |
+| **Notizen** | Erstellen, Lesen, Aktualisieren, Löschen (CRUD) |
+| **Tags & Filter** | Tags, Prioritäten (low/medium/high), Volltextsuche, Sortierung |
+| **Erinnerungen** | Optionales Erinnerungsdatum pro Notiz |
+| **Zusatzfelder** | Flexible Key-Value-Paare pro Notiz |
+| **Checklisten** | Verschachtelte Aufgaben innerhalb von Notizen |
+| **Admin-Bereich** | Benutzer- & Notizenverwaltung, Systemstatistiken |
+| **Frontend** | Responsives Web-UI mit TypeScript & Vite |
 
 ---
 
-## 🛠️ Technologie-Stack
+## Technologie-Stack
 
 ### Backend
 - **Node.js** + **Express.js** (ES Modules)
@@ -41,7 +41,7 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 
 ---
 
-## 📋 Voraussetzungen
+## Voraussetzungen
 
 ### Für alle Optionen benötigt:
 
@@ -50,7 +50,7 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 2. Lade Docker Desktop für dein Betriebssystem herunter und installiere es
 3. Starte Docker Desktop und warte, bis das Symbol in der Taskleiste **grün** wird
 
-> ⚠️ **Docker Desktop muss immer im Hintergrund laufen**, wenn du das Projekt startest.
+> **Hinweis:** Docker Desktop muss immer im Hintergrund laufen, wenn du das Projekt startest.
 
 ### Zusätzlich für lokale Entwicklung:
 
@@ -70,7 +70,7 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 
 ---
 
-## 🚀 Option 1: Docker Compose *(empfohlen)*
+## Option 1: Docker Compose *(empfohlen)*
 
 Der einfachste Weg — alles läuft in Containern, keine weitere Konfiguration nötig.
 
@@ -97,9 +97,9 @@ Warte, bis im Terminal folgende Meldungen erscheinen:
 
 | Service | URL |
 |---|---|
-| 🎨 Frontend | [http://localhost:5173](http://localhost:5173) |
-| 🖥️ Backend API | [http://localhost:5000](http://localhost:5000) |
-| 🗄️ MongoDB | `localhost:27017` |
+| Frontend | [http://localhost:5173](http://localhost:5173) |
+| Backend API | [http://localhost:5000](http://localhost:5000) |
+| MongoDB | `localhost:27017` |
 
 ### Services stoppen
 
@@ -113,7 +113,7 @@ docker-compose down -v
 
 ---
 
-## 💻 Option 2: Lokale Entwicklung *(für Entwickler mit Hot-Reload)*
+## Option 2: Lokale Entwicklung *(für Entwickler mit Hot-Reload)*
 
 Ideal wenn du am Code arbeitest — Änderungen werden sofort im Browser sichtbar.
 
@@ -158,7 +158,7 @@ JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
 NODE_ENV=development
 ```
 
-> 💡 Der `MONGO_URI` zeigt auf den MongoDB-Container (`localhost:27017`), der von Docker Compose gestartet wird. **Dieser Wert ist für alle Entwickler identisch.**
+> Der `MONGO_URI` zeigt auf den MongoDB-Container (`localhost:27017`), der von Docker Compose gestartet wird. **Dieser Wert ist für alle Entwickler identisch.**
 
 ### Schritt 4: Anwendung starten
 
@@ -170,8 +170,8 @@ Warte, bis beide Services bereit sind:
 
 | Service | URL | Bereit wenn... |
 |---|---|---|
-| 🖥️ Backend | [http://localhost:5000](http://localhost:5000) | `Server läuft auf Port 5000` erscheint |
-| 🎨 Frontend | [http://localhost:5173](http://localhost:5173) | `Local: http://localhost:5173` erscheint |
+| Backend | [http://localhost:5000](http://localhost:5000) | `Server läuft auf Port 5000` erscheint |
+| Frontend | [http://localhost:5173](http://localhost:5173) | `Local: http://localhost:5173` erscheint |
 
 ### Anwendung stoppen
 
@@ -184,9 +184,9 @@ docker-compose down
 
 ---
 
-## 🌱 Testdaten einfügen
+## Testdaten einfügen
 
-> 💡 **Automatisches Seeding:** Beim ersten Start (lokal oder per Docker) werden die Testdaten automatisch eingespielt, sofern die Datenbank noch leer ist. Ein manueller Aufruf ist daher nur nötig, um die Daten zurückzusetzen.
+> **Automatisches Seeding:** Beim ersten Start (lokal oder per Docker) werden die Testdaten automatisch eingespielt, sofern die Datenbank noch leer ist. Ein manueller Aufruf ist daher nur nötig, um die Daten zurückzusetzen.
 
 Um die Datenbank manuell mit Beispieldaten zu befüllen (löscht alle bestehenden Daten):
 
@@ -198,12 +198,12 @@ Danach kannst du dich mit diesen Testkonten anmelden:
 
 | Rolle | E-Mail | Passwort |
 |---|---|---|
-| 👑 Admin | `admin@example.com` | `AdminPassword123!` |
-| 👤 Benutzer | `user@example.com` | `UserPassword123!` |
+| Admin | `admin@example.com` | `AdminPassword123!` |
+| Benutzer | `user@example.com` | `UserPassword123!` |
 
 ---
 
-## ❓ Häufige Probleme
+## Häufige Probleme
 
 ### „Cannot connect to MongoDB" / Datenbankfehler
 → Docker Desktop läuft nicht. Starte Docker Desktop, warte bis es grün ist, dann erneut versuchen.
@@ -231,7 +231,7 @@ cd apps/frontend && npx vite --force
 
 ---
 
-## 🔧 Verfügbare Scripts
+## Verfügbare Scripts
 
 ### Root-Level
 
@@ -264,24 +264,24 @@ cd apps/frontend && npx vite --force
 
 ---
 
-## 📚 API-Endpunkte
+## API-Endpunkte
 
 ### Authentifizierung
 
 | Methode | Endpunkt | Beschreibung | Auth |
 |---|---|---|---|
-| `POST` | `/api/auth/register` | Benutzer registrieren | ❌ |
-| `POST` | `/api/auth/login` | Benutzer anmelden | ❌ |
+| `POST` | `/api/auth/register` | Benutzer registrieren | Nein |
+| `POST` | `/api/auth/login` | Benutzer anmelden | Nein |
 
 ### Notizen
 
 | Methode | Endpunkt | Beschreibung | Auth |
 |---|---|---|---|
-| `GET` | `/api/notes` | Alle eigenen Notizen abrufen | ✅ |
-| `POST` | `/api/notes` | Neue Notiz erstellen | ✅ |
-| `GET` | `/api/notes/:id` | Einzelne Notiz abrufen | ✅ |
-| `PUT` | `/api/notes/:id` | Notiz aktualisieren | ✅ |
-| `DELETE` | `/api/notes/:id` | Notiz löschen | ✅ |
+| `GET` | `/api/notes` | Alle eigenen Notizen abrufen | Ja |
+| `POST` | `/api/notes` | Neue Notiz erstellen | Ja |
+| `GET` | `/api/notes/:id` | Einzelne Notiz abrufen | Ja |
+| `PUT` | `/api/notes/:id` | Notiz aktualisieren | Ja |
+| `DELETE` | `/api/notes/:id` | Notiz löschen | Ja |
 
 **Query-Parameter für `GET /api/notes`:**
 
@@ -306,7 +306,7 @@ cd apps/frontend && npx vite --force
 
 ---
 
-## 🔐 Authentifizierung
+## Authentifizierung
 
 Die API verwendet **JWT Bearer Tokens**.
 
@@ -343,46 +343,46 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ---
 
-## 🏗️ Projektstruktur
+## Projektstruktur
 
 ```
-📦 Neue-Datenbankkonzepte_Notizen-API
-├── 📁 apps/
-│   ├── 📁 backend/                 # Express.js API
-│   │   ├── 📁 src/
-│   │   │   ├── 📁 config/          # Datenbank-Konfiguration
-│   │   │   ├── 📁 controllers/     # HTTP-Request-Handler
-│   │   │   ├── 📁 middleware/      # Auth & Rollen-Middleware
-│   │   │   ├── 📁 models/          # Mongoose-Modelle (User, Note)
-│   │   │   ├── 📁 routes/          # API-Routen
-│   │   │   ├── 📁 services/        # Geschäftslogik
-│   │   │   ├── 📁 types/           # TypeScript-Typen
-│   │   │   ├── index.ts            # Einstiegspunkt
-│   │   │   └── seed.ts             # Testdaten-Skript
-│   │   ├── 📄 .env.example         # Vorlage für Umgebungsvariablen
-│   │   ├── 📄 Dockerfile
-│   │   ├── 📄 package.json
-│   │   └── 📄 tsconfig.json
-│   └── 📁 frontend/                # Vite + TypeScript Client
-│       ├── 📁 src/
-│       │   ├── 📁 api/             # API-Kommunikation
-│       │   ├── 📁 views/           # UI-Komponenten
-│       │   ├── 📁 types/           # TypeScript-Typen
-│       │   ├── 📁 utils/           # Hilfsfunktionen
-│       │   ├── main.ts             # App-Einstiegspunkt
-│       │   └── styles.css          # Styling
-│       ├── 📄 index.html           # HTML-Einstiegspunkt
-│       ├── 📄 Dockerfile
-│       └── 📄 package.json
-├── 📁 documents/                   # Projektdokumentation
-├── 📄 docker-compose.yml           # Docker Compose Konfiguration
-├── 📄 package.json                 # Root Package (Workspaces)
-└── 📄 README.md
+Neue-Datenbankkonzepte_Notizen-API
+├── apps/
+│   ├── backend/                 # Express.js API
+│   │   ├── src/
+│   │   │   ├── config/          # Datenbank-Konfiguration
+│   │   │   ├── controllers/     # HTTP-Request-Handler
+│   │   │   ├── middleware/      # Auth & Rollen-Middleware
+│   │   │   ├── models/          # Mongoose-Modelle (User, Note)
+│   │   │   ├── routes/          # API-Routen
+│   │   │   ├── services/        # Geschäftslogik
+│   │   │   ├── types/           # TypeScript-Typen
+│   │   │   ├── index.ts         # Einstiegspunkt
+│   │   │   └── seed.ts          # Testdaten-Skript
+│   │   ├── .env.example         # Vorlage für Umgebungsvariablen
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   └── frontend/                # Vite + TypeScript Client
+│       ├── src/
+│       │   ├── api/             # API-Kommunikation
+│       │   ├── views/           # UI-Komponenten
+│       │   ├── types/           # TypeScript-Typen
+│       │   ├── utils/           # Hilfsfunktionen
+│       │   ├── main.ts          # App-Einstiegspunkt
+│       │   └── styles.css       # Styling
+│       ├── index.html           # HTML-Einstiegspunkt
+│       ├── Dockerfile
+│       └── package.json
+├── documents/                   # Projektdokumentation
+├── docker-compose.yml           # Docker Compose Konfiguration
+├── package.json                 # Root Package (Workspaces)
+└── README.md
 ```
 
 ---
 
-## 🎨 Code-Qualität
+## Code-Qualität
 
 ```bash
 # ESLint ausführen
@@ -397,13 +397,13 @@ npm run format
 
 ---
 
-## 📝 Lizenz
+## Lizenz
 
 ISC
 
 ---
 
-## 👨‍💻 Autoren
+## Autoren
 
 Entwickelt im Rahmen des Moduls **"Neue Datenbankkonzepte"** an der **DHBW Heidenheim**.
 

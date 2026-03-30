@@ -100,8 +100,8 @@ const renderUsers = (users: User[]): void => {
         const isSelf = currentUser?.id === user._id;
 
         const statusBadge = user.isActive
-            ? '<span style="color:#22c55e;font-weight:600;">✓ Aktiv</span>'
-            : '<span style="color:#ef4444;font-weight:600;">✗ Gesperrt</span>';
+            ? '<span style="color:#22c55e;font-weight:600;">Aktiv</span>'
+            : '<span style="color:#ef4444;font-weight:600;">Gesperrt</span>';
 
         row.innerHTML = `
             <td>${escapeHtml(user.email)}${isSelf ? ' <em style="color:#94a3b8;font-size:0.8em;">(Sie)</em>' : ''}</td>
