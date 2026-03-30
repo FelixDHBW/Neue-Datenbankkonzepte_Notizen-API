@@ -80,7 +80,7 @@ docker-compose up --build
 
 > **Hinweis:** Für Docker keine `.env` nötig – alle Werte sind in `docker-compose.yml` vorkonfiguriert.
 
-Warte, bis im Terminal folgende Meldungen erscheinen:
+Warte, bis im Terminal folgende Meldungen erscheinen (es erscheint noch weiterer Output danach – das ist normal):
 - `Server läuft auf Port 5000`
 - `Local: http://localhost:5173`
 
