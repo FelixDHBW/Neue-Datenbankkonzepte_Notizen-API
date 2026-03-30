@@ -76,6 +76,8 @@ docker-compose up --build
 
 > Beim ersten Start werden die Docker-Images gebaut — das dauert 2–5 Minuten. Danach geht es schneller.
 
+> **Hinweis:** Für Docker keine `.env` nötig – alle Werte sind in `docker-compose.yml` vorkonfiguriert.
+
 Warte, bis im Terminal folgende Meldungen erscheinen:
 - `Server läuft auf Port 5000`
 - `Local: http://localhost:5173`
