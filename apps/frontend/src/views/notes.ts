@@ -215,7 +215,7 @@ export const showNoteDetail = async (noteId: string): Promise<void> => {
                             ([key, value]) => `
                         <div class="custom-field-item">
                             <span class="custom-field-key">${escapeHtml(key)}:</span>
-                            <span class="custom-field-value">${escapeHtml(String(value))}</span>
+                            <span class="custom-field-value">${escapeHtml(typeof value === 'object' ? JSON.stringify(value) : String(value))}</span>
                         </div>`
                         )
                         .join('')}

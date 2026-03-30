@@ -103,7 +103,7 @@ export const showNoteForm = (note?: Note): void => {
 
         if (note.customFields) {
             Object.entries(note.customFields).forEach(([key, value]) => {
-                addCustomFieldRow(key, String(value));
+                addCustomFieldRow(key, typeof value === 'object' ? JSON.stringify(value) : String(value));
             });
         }
 

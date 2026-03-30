@@ -79,8 +79,9 @@ const runSeedIfEmpty = async (): Promise<void> => {
             ],
             customFields: new Map<string, unknown>([
                 ['budget', '150 EUR'],
-                ['store', 'Rewe & Getränkemarkt'],
-                ['guestsInfo', { expected: 15, confirmed: 12 }],
+                ['einkaufsort', 'Rewe & Getränkemarkt'],
+                ['erwarteteGäste', 15],
+                ['bestätigteGäste', 12],
             ]),
         },
         {
@@ -103,8 +104,9 @@ const runSeedIfEmpty = async (): Promise<void> => {
             priority: NotePriority.LOW,
             customFields: new Map<string, unknown>([
                 ['druckerModell', 'Prusa i3 MK3S+'],
-                ['kostenSchätzung', 800],
-                ['links', ['https://prusa3d.com', 'https://thingiverse.com']],
+                ['kostenSchätzung', '800 EUR'],
+                ['link1', 'https://prusa3d.com'],
+                ['link2', 'https://thingiverse.com'],
             ]),
         },
     ]);

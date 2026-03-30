@@ -184,9 +184,11 @@ docker-compose down
 
 ---
 
-## 🌱 Testdaten einfügen (optional)
+## 🌱 Testdaten einfügen
 
-Um die Anwendung mit Beispieldaten zu befüllen:
+> 💡 **Automatisches Seeding:** Beim ersten Start (lokal oder per Docker) werden die Testdaten automatisch eingespielt, sofern die Datenbank noch leer ist. Ein manueller Aufruf ist daher nur nötig, um die Daten zurückzusetzen.
+
+Um die Datenbank manuell mit Beispieldaten zu befüllen (löscht alle bestehenden Daten):
 
 ```bash
 npm run seed
