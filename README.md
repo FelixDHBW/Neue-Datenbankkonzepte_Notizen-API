@@ -27,23 +27,18 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 - **MongoDB** + **Mongoose** ODM
 - **JWT** für Authentifizierung
 - **bcryptjs** für Passwort-Hashing
-- **tsx** für TypeScript-Ausführung im Dev-Modus
 
 ### Frontend
 - **TypeScript** (Vanilla)
-- **Vite** (Build-Tool & Dev-Server mit `--force` Cache-Busting)
+- **Vite** (Build-Tool & Dev-Server)
 - **Vanilla CSS** (modernes, responsives Design)
 
-### Infrastruktur & Tooling
-- **Docker Compose** für containerisierte Entwicklung
-- **npm Workspaces** (Monorepo)
-- **ESLint** + **Prettier** für Code-Qualität
+### Infrastruktur
+- **Docker Compose** für containerisierte Ausführung
 
 ---
 
 ## Voraussetzungen
-
-### Für alle Optionen benötigt:
 
 **Docker Desktop**
 1. Öffne [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
@@ -52,27 +47,13 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 
 > **Hinweis:** Docker Desktop muss immer im Hintergrund laufen, wenn du das Projekt startest.
 
-### Zusätzlich für lokale Entwicklung:
-
-**Node.js (Version 18 oder neuer)**
-1. Öffne [https://nodejs.org/](https://nodejs.org/)
-2. Klicke auf **"LTS"** und lade den Installer herunter
-3. Führe den Installer aus (alle Standardeinstellungen übernehmen)
-4. Überprüfe die Installation:
-   ```bash
-   node --version
-   # Ausgabe: v20.x.x oder höher
-   ```
-
 **Git**
 1. Öffne [https://git-scm.com/downloads](https://git-scm.com/downloads)
 2. Lade Git herunter und installiere es
 
 ---
 
-## Option 1: Docker Compose *(empfohlen)*
-
-Der einfachste Weg — alles läuft in Containern, keine weitere Konfiguration nötig.
+## Installation & Start
 
 ### Schritt 1: Repository klonen
 
@@ -113,86 +94,9 @@ docker-compose down -v
 
 ---
 
-## Option 2: Lokale Entwicklung *(für Entwickler mit Hot-Reload)*
+## Testdaten
 
-Ideal wenn du am Code arbeitest — Änderungen werden sofort im Browser sichtbar.
-
-### Schritt 1: Repository klonen & Dependencies installieren
-
-```bash
-git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
-cd Neue-Datenbankkonzepte_Notizen-API
-npm install
-```
-
-### Schritt 2: MongoDB per Docker starten
-
-```bash
-docker-compose up -d mongodb
-```
-
-Überprüfe, ob der Container läuft:
-```bash
-docker ps
-# Du solltest einen Container namens "mongodb" sehen
-```
-
-### Schritt 3: Umgebungsvariablen einrichten
-
-**Windows (CMD):**
-```cmd
-copy apps\backend\.env.example apps\backend\.env
-```
-
-**Windows (PowerShell) / Mac / Linux:**
-```bash
-cp apps/backend/.env.example apps/backend/.env
-```
-
-Die Datei ist bereits vollständig vorkonfiguriert — **du musst nichts ändern**:
-
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/notizen-api
-JWT_SECRET=dein-geheimer-schluessel-mindestens-32-zeichen-lang
-NODE_ENV=development
-```
-
-> Der `MONGO_URI` zeigt auf den MongoDB-Container (`localhost:27017`), der von Docker Compose gestartet wird. **Dieser Wert ist für alle Entwickler identisch.**
-
-### Schritt 4: Anwendung starten
-
-```bash
-npm run dev
-```
-
-Warte, bis beide Services bereit sind:
-
-| Service | URL | Bereit wenn... |
-|---|---|---|
-| Backend | [http://localhost:5000](http://localhost:5000) | `Server läuft auf Port 5000` erscheint |
-| Frontend | [http://localhost:5173](http://localhost:5173) | `Local: http://localhost:5173` erscheint |
-
-### Anwendung stoppen
-
-```bash
-# Strg+C im Terminal (stoppt Backend & Frontend)
-
-# MongoDB-Container stoppen
-docker-compose down
-```
-
----
-
-## Testdaten einfügen
-
-> **Automatisches Seeding:** Beim ersten Start (lokal oder per Docker) werden die Testdaten automatisch eingespielt, sofern die Datenbank noch leer ist. Ein manueller Aufruf ist daher nur nötig, um die Daten zurückzusetzen.
-
-Um die Datenbank manuell mit Beispieldaten zu befüllen (löscht alle bestehenden Daten):
-
-```bash
-npm run seed
-```
+> **Automatisches Seeding:** Beim ersten Start werden die Testdaten automatisch eingespielt, sofern die Datenbank noch leer ist.
 
 Danach kannst du dich mit diesen Testkonten anmelden:
 
@@ -209,58 +113,13 @@ Danach kannst du dich mit diesen Testkonten anmelden:
 → Docker Desktop läuft nicht. Starte Docker Desktop, warte bis es grün ist, dann erneut versuchen.
 
 ### „Port 5000 already in use"
-→ Ein anderes Programm nutzt Port 5000. Beende es oder ändere `PORT=5001` in `apps/backend/.env`.
+→ Ein anderes Programm nutzt Port 5000. Beende es oder starte Docker neu.
 
 ### „Port 5173 already in use"
-→ Ein anderer Vite-Dev-Server läuft noch. Beende ihn mit `Strg+C` oder starte das Frontend auf einem anderen Port:
-```bash
-npm run dev -w frontend -- --port 5174
-```
-
-### „npm: command not found"
-→ Node.js ist nicht installiert. Installiere Node.js (siehe Voraussetzungen).
-
-### Frontend zeigt alte Daten / lädt nicht richtig
-→ Vite-Cache leeren:
-```bash
-cd apps/frontend && npx vite --force
-```
+→ Ein anderer Vite-Dev-Server läuft noch. Beende ihn mit `Strg+C`.
 
 ### Docker-Fehler: `dockerDesktopLinuxEngine`
 → Docker Desktop neu starten und warten bis das Symbol in der Taskleiste grün wird.
-
----
-
-## Verfügbare Scripts
-
-### Root-Level
-
-| Script | Beschreibung |
-|---|---|
-| `npm run dev` | Backend + Frontend parallel starten (lokal) |
-| `npm run build` | Backend + Frontend bauen |
-| `npm run seed` | Datenbank mit Testdaten füllen |
-| `npm run lint` | ESLint für beide Projekte |
-| `npm run lint:fix` | ESLint mit automatischer Fehlerbehebung |
-| `npm run format` | Prettier Formatierung |
-| `npm run docker:up` | Alle Services per Docker Compose starten |
-| `npm run docker:down` | Docker Compose stoppen |
-
-### Backend-Spezifisch
-
-| Script | Beschreibung |
-|---|---|
-| `npm run dev -w backend` | Dev-Server mit Hot-Reload |
-| `npm run build -w backend` | TypeScript kompilieren |
-| `npm run start -w backend` | Kompilierte App starten |
-
-### Frontend-Spezifisch
-
-| Script | Beschreibung |
-|---|---|
-| `npm run dev -w frontend` | Vite Dev-Server (mit `--force`) |
-| `npm run build -w frontend` | Produktions-Build |
-| `npm run preview -w frontend` | Build-Vorschau |
 
 ---
 
@@ -378,21 +237,6 @@ Neue-Datenbankkonzepte_Notizen-API
 ├── docker-compose.yml           # Docker Compose Konfiguration
 ├── package.json                 # Root Package (Workspaces)
 └── README.md
-```
-
----
-
-## Code-Qualität
-
-```bash
-# ESLint ausführen
-npm run lint
-
-# ESLint mit automatischer Fehlerbehebung
-npm run lint:fix
-
-# Prettier Formatierung anwenden
-npm run format
 ```
 
 ---
