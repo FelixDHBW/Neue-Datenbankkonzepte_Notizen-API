@@ -48,14 +48,21 @@ Eine vollständige Full-Stack-Notizen-Anwendung mit Express.js Backend, Vite Fro
 
 Folgende Programme müssen **vor dem Start** installiert sein:
 
-### 1. Docker Desktop
+### 1. Visual Studio Code (VSCode)
+1. Öffne [https://code.visualstudio.com](https://code.visualstudio.com)
+2. Lade VSCode für dein Betriebssystem herunter und installiere es
+3. Starte VSCode nach der Installation
+
+> **Empfehlung:** VSCode ist der empfohlene Editor für dieses Projekt. Alle folgenden Schritte beziehen sich auf VSCode.
+
+### 2. Docker Desktop
 1. Öffne [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
 2. Lade Docker Desktop für dein Betriebssystem herunter und installiere es
 3. Starte Docker Desktop und warte, bis das Symbol in der Taskleiste **grün** wird
 
 > **Wichtig:** Docker Desktop muss immer im Hintergrund laufen, wenn du das Projekt startest.
 
-### 2. Git
+### 3. Git
 1. Öffne [https://git-scm.com/downloads](https://git-scm.com/downloads)
 2. Lade Git herunter und installiere es
 
@@ -64,19 +71,53 @@ Folgende Programme müssen **vor dem Start** installiert sein:
 ## Installation & Start
 
 > **Übersicht der Reihenfolge:**
-> 1. Docker Desktop starten (grünes Symbol abwarten)
-> 2. Repository klonen
-> 3. Erster Start: `docker-compose up --build` (Images bauen + starten)
-> 4. Browser öffnen
+> 1. Visual Studio Code installieren & starten
+> 2. Docker Desktop starten (grünes Symbol abwarten)
+> 3. Repository klonen
+> 4. Projektordner in VSCode öffnen
+> 5. Erster Start: `docker-compose up --build` (Images bauen + starten)
+> 6. Browser öffnen
 
 ### Schritt 1: Repository klonen
 
-```bash
-git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
-cd Neue-Datenbankkonzepte_Notizen-API
-```
+Du hast zwei Möglichkeiten, das Repository zu klonen:
 
-### Schritt 2: Erster Start – Images bauen und alle Services starten
+#### Option A: Klonen über das VSCode-Terminal (empfohlen)
+
+1. Öffne VSCode
+2. Öffne das integrierte Terminal über das Menü **Terminal → Neues Terminal** (oder Tastenkürzel `` Strg+` ``)
+3. Navigiere in einen Ordner deiner Wahl, z. B.:
+   ```bash
+   cd C:\Users\DeinName\Projekte
+   ```
+4. Klone das Repository:
+   ```bash
+   git clone https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
+   ```
+
+#### Option B: Klonen über die VSCode-Oberfläche
+
+1. Öffne VSCode
+2. Klicke auf **Quellcodeverwaltung** (Symbol in der linken Seitenleiste, oder `Strg+Shift+G`)
+3. Klicke auf **Repository klonen**
+4. Gib folgende URL ein und bestätige mit Enter:
+   ```
+   https://github.com/FelixDHBW/Neue-Datenbankkonzepte_Notizen-API.git
+   ```
+5. Wähle einen Zielordner auf deinem Computer aus
+6. Klicke auf **In neuem Fenster öffnen**, wenn VSCode danach fragt
+
+### Schritt 2: Projektordner in VSCode öffnen
+
+Falls VSCode den Ordner nicht automatisch geöffnet hat:
+
+1. Klicke in VSCode auf **Datei → Ordner öffnen…** (oder `Strg+K`, dann `Strg+O`)
+2. Navigiere zum geklonten Ordner `Neue-Datenbankkonzepte_Notizen-API`
+3. Klicke auf **Ordner auswählen**
+
+Der Projektordner ist nun in VSCode geöffnet und du siehst alle Dateien in der linken Seitenleiste.
+
+### Schritt 3: Erster Start – Images bauen und alle Services starten
 
 ```bash
 docker-compose up --build
@@ -92,7 +133,7 @@ Warte, bis im Terminal folgende Meldungen erscheinen (weiterer Output danach ist
 - `Server läuft auf Port 5000`
 - `Local: http://localhost:5173`
 
-### Schritt 3: Im Browser öffnen
+### Schritt 4: Im Browser öffnen
 
 | Service | URL |
 |---|---|
